@@ -1,0 +1,47 @@
+/* Group Header */
+.group-header {
+  background-color: #f1f1f1;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.group-metrics {
+  display: flex;
+  /* Use Flexbox */
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.group-metrics span {
+  font-size: 0.9rem;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+/* Badge SVG Styling */
+.badge-svg {
+  margin-left: 5px;
+}
+
+.badge-svg svg {
+  height: 20px;
+  width: auto;
+}
+
+/* Passed Badge */
+.passed-badge {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Adjust Badge Colors */
+.badge.bg-secondary {
+  background-color: #6c757d;
+  color: white;
+}

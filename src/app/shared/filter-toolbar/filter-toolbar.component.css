@@ -1,0 +1,71 @@
+/* Filter Toolbar Styles */
+.filter-toolbar {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 5px;
+  /* Reduced padding */
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Search Input Styles */
+.filter-toolbar .filter-search {
+  flex: 0 0 60%;
+  max-width: 60%;
+  padding: 4px 8px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+}
+
+/* Filter Options Container */
+.filter-toolbar .filter-options {
+  display: flex;
+  flex: 0 0 40%;
+  max-width: 40%;
+}
+
+/* Filter Options Styles */
+.filter-toolbar .filter-select {
+  flex: 1;
+  min-width: 0;
+  /* Allow shrinking */
+  padding: 4px 8px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  margin-right: 5px;
+  background-color: white;
+}
+
+.filter-toolbar .filter-select:last-child {
+  margin-right: 0;
+}
+
+/* General Input, Select, Button Styles */
+.filter-toolbar input,
+.filter-toolbar select {
+  font-size: 0.9rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+
+  /* Adjust filter toolbar on smaller screens */
+  .filter-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .filter-toolbar .filter-search,
+  .filter-toolbar .filter-options {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-right: 0;
+  }
+
+  .filter-toolbar .filter-search {
+    margin-bottom: 10px;
+  }
+}

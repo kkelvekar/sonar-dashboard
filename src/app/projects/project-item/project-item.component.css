@@ -1,0 +1,66 @@
+.card-custom {
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  padding: 15px;
+}
+
+/* Metrics Alignment */
+.card-custom .metrics-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-custom .metrics-row .metric-item {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-right: 15px;
+  /* Reduced margin to fit more items in a line */
+}
+
+.card-custom .metrics-row .metric-item:last-child {
+  margin-right: 0;
+}
+
+.metric-icon {
+  font-size: 1.2rem;
+  color: #4caf50;
+  margin-right: 5px;
+}
+
+/* Badge SVG Styling */
+.badge-svg {
+  margin-left: 5px;
+}
+
+.badge-svg svg {
+  height: 20px;
+  width: auto;
+}
+
+/* Passed Badge */
+.passed-badge {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Adjust Badge Colors */
+.badge.bg-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+@media (max-width: 576px) {
+  .card-custom .metrics-row .metric-item {
+    flex: 1 1 100%;
+    /* One item per row on extra small screens */
+  }
+}
+
+@media (max-width: 992px) {
+  .card-custom .metrics-row .metric-item {
+    flex: 1 1 50%;
+    /* Two items per row on smaller screens */
+  }
+}

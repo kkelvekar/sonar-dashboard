@@ -1,0 +1,29 @@
+/* Navbar Styles */
+.navbar-custom {
+  background-color: #333;
+  color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar-custom .container-fluid {
+  max-width: 1400px;
+  /* Match the content-container width */
+  margin: 0 auto;
+}
+
+.navbar-nav {
+  margin-left: 20px;
+  flex-direction: row;
+  margin-right: auto;
+}
+
+.navbar-nav .nav-item {
+  margin-right: 15px;
+}
+
+.navbar-nav .nav-link {
+  color: white;
+}

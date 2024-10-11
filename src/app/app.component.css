@@ -1,0 +1,41 @@
+/* Main Wrapper */
+.main-wrapper {
+  max-width: 1400px;
+  /* Set the maximum width */
+  margin: 0 auto;
+  /* Center the container */
+  padding-top: 70px;
+  /* Offset for the navbar */
+  display: flex;
+}
+
+/* Main Content Adjustments */
+.content-container {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+/* Create Project Button Styles in Header */
+.header-actions {
+  margin-left: auto;
+}
+
+.header-actions .btn {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+
+  /* Adjust header actions on smaller screens */
+  .header-actions {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .header-container {
+    flex-wrap: wrap;
+  }
+
+}
