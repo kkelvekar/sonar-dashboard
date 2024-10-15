@@ -1,4 +1,9 @@
-<div class="card-container">
-  <app-project-group></app-project-group>
-  <app-project-item></app-project-item>
+<div class="card-container" *ngFor="let projectGroup of projectGroups">
+  <!-- Render project group -->
+  <app-project-group [projectGroup]="projectGroup"></app-project-group>
+
+  <!-- Loop through each project in the current project group without adding extra elements to the DOM -->
+  <ng-container *ngFor="let project of projectGroup.projects">
+    <app-project-item [projectItem]="project"></app-project-item>
+  </ng-container>
 </div>

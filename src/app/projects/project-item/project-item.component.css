@@ -39,9 +39,13 @@
   width: auto;
 }
 
-/* Passed Badge */
 .passed-badge {
   background-color: #4caf50;
+  color: white;
+}
+
+.failed-badge {
+  background-color: #d63030;
   color: white;
 }
 

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FilterToolbarComponent } from './filter-toolbar.component';
+import { ProjectToolbarFilterComponent } from './project-toolbar-filter.component';
 
 describe('FilterToolbarComponent', () => {
-  let component: FilterToolbarComponent;
-  let fixture: ComponentFixture<FilterToolbarComponent>;
+  let component: ProjectToolbarFilterComponent;
+  let fixture: ComponentFixture<ProjectToolbarFilterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FilterToolbarComponent]
+      declarations: [ProjectToolbarFilterComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FilterToolbarComponent);
+    fixture = TestBed.createComponent(ProjectToolbarFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

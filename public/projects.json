@@ -1,0 +1,13 @@
+[
+  {
+    "project_key":"Basket-API",
+    "project_name":"OTEL Basket API",
+    "project_group":"Group 1",
+    "project_token": "sqb_af5a96b7b9a29da14321bfccbe2714fa635a10ca"
+  }, {
+    "project_key":"Catalog-API",
+    "project_name":"OTEL Catalog API",
+    "project_group":"Group 2",
+    "project_token": "sqb_7559d463bda9f69af4db554b71f194b8d35572f1"
+  }
+]

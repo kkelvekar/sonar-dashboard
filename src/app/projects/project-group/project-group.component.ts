@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
+import { ProjectGroup } from '../interfaces/projectGroup';
 
 @Component({
   selector: 'app-project-group',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class ProjectGroupComponent {
 
+  @Input()
+  projectGroup!: ProjectGroup;
 }

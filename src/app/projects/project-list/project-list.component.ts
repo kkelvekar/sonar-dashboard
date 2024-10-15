@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ProjectGroup } from '../interfaces/projectGroup';
+import { ProjectService } from '../services/project.service';
 
 @Component({
   selector: 'app-project-list',
@@ -7,4 +9,10 @@ import { Component } from '@angular/core';
 })
 export class ProjectListComponent {
 
+  projectGroups!: ProjectGroup[];
+
+  constructor(private projectService: ProjectService) {
+    //this.projectGroups = mockProjectGroups;
+    this.projectService.getProjectsByGroup().subscribe((projectGroups: ProjectGroup[]) => this.projectGroups = projectGroups);
+  }
 }
