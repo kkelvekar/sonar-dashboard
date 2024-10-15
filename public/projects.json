@@ -7,7 +7,22 @@
   }, {
     "project_key":"Catalog-API",
     "project_name":"OTEL Catalog API",
-    "project_group":"Group 2",
+    "project_group":"Group 1",
     "project_token": "sqb_7559d463bda9f69af4db554b71f194b8d35572f1"
+  }, {
+    "project_key":"CSharpCodingPractice",
+    "project_name":"CSharp Coding Practice",
+    "project_group":"Group 3",
+    "project_token": "sqb_a03e9b560cea99840033323510000b162e64101d"
+  }, {
+    "project_key":"Globo-Ticket-Management",
+    "project_name":"Globo Ticket Management",
+    "project_group":"Group 2",
+    "project_token": "sqb_8fbb7e67c2e9ccca4c8743caab0c8798941fc104"
+  }, {
+    "project_key":"ImageGallery-Oauth2-Demo",
+    "project_name":"ImageGallery Oauth2 Demo",
+    "project_group":"Group 2",
+    "project_token": "sqb_31d9824bc0d4cabc105afee2c1f80379aa1ef649"
   }
 ]

@@ -13,6 +13,7 @@ const TOKEN = environment.sonarToken; // e.g., 'sqb_c5a8cb98077a29d831751686ae50
 
 // Metric Names
 const METRICS = [
+  'bugs',
   'alert_status',
   'coverage',
   'code_smells',
@@ -23,6 +24,7 @@ const METRICS = [
   'reliability_rating',
   'sqale_index',
   'vulnerabilities',
+  'security_rating'
 ];
 
 @Injectable({
