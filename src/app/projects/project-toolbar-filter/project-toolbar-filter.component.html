@@ -1,11 +1,13 @@
 <!-- Filter Toolbar -->
 <div class="filter-toolbar">
   <!-- Search Input -->
-  <input type="text" class="form-control filter-search" placeholder="Search for projects...">
+  <input type="text" class="form-control filter-search" placeholder="Search for projects..."
+          [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)">
   <!-- Filter Options -->
   <div class="filter-options">
-    <select class="form-select filter-select">
-      <option>Group By</option>
+    <select class="form-select filter-select" [(ngModel)]="selectedGroup" (ngModelChange)="onGroupChange($event)">
+      <option value="">Search by group</option>
+      <option *ngFor="let group of projectGroups" [value]="group">{{ group }}</option>
     </select>
     <select class="form-select filter-select">
       <option>Sort by</option>

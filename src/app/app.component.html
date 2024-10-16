@@ -10,8 +10,8 @@
       </div>
     </div>
     <!-- Filter Toolbar -->
-    <project-toolbar-filter></project-toolbar-filter>
+    <project-toolbar-filter (searchChange)="onSearchChange($event)" (groupChange)="onGroupFilterChange($event)"></project-toolbar-filter>
     <!-- Project List -->
-    <app-project-list></app-project-list>
+    <app-project-list [filter]="searchTerm" [groupFilter]="selectedGroup"></app-project-list>
   </div>
 </div>

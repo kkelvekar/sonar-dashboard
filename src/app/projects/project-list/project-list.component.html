@@ -1,4 +1,4 @@
-<div class="card-container" *ngFor="let projectGroup of projectGroups">
+<div class="card-container" *ngFor="let projectGroup of filteredProjectGroups">
   <!-- Render project group -->
   <app-project-group [projectGroup]="projectGroup"></app-project-group>
 
@@ -6,4 +6,8 @@
   <ng-container *ngFor="let project of projectGroup.projects">
     <app-project-item [projectItem]="project"></app-project-item>
   </ng-container>
+</div>
+ <!-- If no projects match, show a message -->
+ <div *ngIf="noProjectsFound" class="alert alert-warning">
+  No projects found.
 </div>

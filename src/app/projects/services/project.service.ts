@@ -3,37 +3,52 @@ import { SonarQubeMetricsService } from './sonarqube-metrics.service';
 import { Project } from '../interfaces/project';
 import { ProjectGroup } from '../interfaces/projectGroup';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
+import { map, switchMap, tap, shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
 
+  private projectDataSubject = new BehaviorSubject<ProjectGroup[]>([]);
+  projectData$ = this.projectDataSubject.asObservable();
+
+  private projectDataObservable: Observable<ProjectGroup[]> | null = null;
+
   private jsonUrl = 'projects.json';
 
-  constructor(private sonarqubeMetricService: SonarQubeMetricsService, private http: HttpClient) { }
+  constructor(
+    private sonarqubeMetricService: SonarQubeMetricsService,
+    private http: HttpClient
+  ) { }
 
   getProjectsByGroup(): Observable<ProjectGroup[]> {
-    return this.getProjectData().pipe(
-      switchMap(projects => {
-        const metricsRequests = projects.map(project =>
-          this.sonarqubeMetricService.getProjectMetrics(project.projectKey, project.projectToken).pipe(
-            map(metrics => {
-              project.metrics = metrics;
-              return project;
-            })
-          )
-        );
+    if (!this.projectDataObservable) {
+      this.projectDataObservable = this.getProjectData().pipe(
+        switchMap(projects => {
+          const metricsRequests = projects.map(project =>
+            this.sonarqubeMetricService.getProjectMetrics(project.projectKey, project.projectToken).pipe(
+              map(metrics => {
+                project.metrics = metrics;
+                return project;
+              })
+            )
+          );
 
-        // Wait for all projects' metrics to be loaded
-        return forkJoin(metricsRequests).pipe(
-          map(projectsWithMetrics => this.groupProjectsByGroupName(projectsWithMetrics)),
-          tap(result => console.log('Service result:', JSON.stringify(result, null, 2)))
-        );
-      })
-    );
+          // Wait for all projects' metrics to be loaded
+          return forkJoin(metricsRequests).pipe(
+            map(projectsWithMetrics => this.groupProjectsByGroupName(projectsWithMetrics)),
+            tap(result => {
+              console.log('Service result:', JSON.stringify(result, null, 2));
+              this.projectDataSubject.next(result);
+            })
+          );
+        }),
+        shareReplay(1) // Ensures all subscribers share the same data and HTTP request
+      );
+    }
+    return this.projectDataObservable;
   }
 
   private getProjectData(): Observable<Project[]> {

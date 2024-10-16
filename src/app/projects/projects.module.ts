@@ -6,6 +6,7 @@ import { ProjectGroupComponent } from './project-group/project-group.component';
 import { ProjectSidebarFilterComponent } from './project-sidebar-filter/project-sidebar-filter.component';
 import { ProjectToolbarFilterComponent } from './project-toolbar-filter/project-toolbar-filter.component';
 import { provideHttpClient  } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { provideHttpClient  } from '@angular/common/http';
     ProjectToolbarFilterComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   providers: [
     provideHttpClient()  // Configures HttpClient with default interceptors and services
