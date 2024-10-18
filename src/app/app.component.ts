@@ -1,21 +1,30 @@
 import { Component } from '@angular/core';
+import { FilterCriteria } from './projects/interfaces/filter-criteria';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'] // Note: styleUrls instead of styleUrl
 })
 export class AppComponent {
   title = 'sonarqube-dashboard';
 
-  searchTerm: string = '';
-  selectedGroup: string = '';
+  filterCriteria: FilterCriteria = {};
 
-  onSearchChange(searchValue: string) {
-    this.searchTerm = searchValue;
+  onFilterChange(criteria: FilterCriteria) {
+    this.filterCriteria = criteria;
   }
 
-  onGroupFilterChange(selectedGroup: string) {
-    this.selectedGroup = selectedGroup;
+  // Add these methods to handle individual filter changes
+  onSearchChange(searchTerm: string) {
+    this.filterCriteria = { ...this.filterCriteria, searchTerm };
+  }
+
+  onGroupChange(group: string) {
+    this.filterCriteria = { ...this.filterCriteria, group };
+  }
+
+  onSortChange(sortBy: string) {
+    this.filterCriteria = { ...this.filterCriteria, sortBy };
   }
 }

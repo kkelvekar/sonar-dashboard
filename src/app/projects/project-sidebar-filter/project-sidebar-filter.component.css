@@ -1,5 +1,4 @@
 /* Sidebar Styles */
-/* Sidebar Styles */
 .sidebar {
   background-color: #f8f9fa;
   width: 250px;
@@ -17,11 +16,35 @@
   height: 100%;
 }
 
-
 .sidebar h5 {
   font-size: 1rem;
   color: #212529;
   margin-bottom: 16px;
+}
+
+.sidebar .filter-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sidebar .filter-header h5 {
+  margin: 0;
+}
+
+.sidebar .filter-header .clear-filters {
+  margin-left: auto; /* Pushes the button to the right */
+  font-size: 0.875rem;
+  padding: 4px 8px;
+  color: #007bff;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.sidebar .filter-header .clear-filters:hover {
+  text-decoration: none;
 }
 
 .filter-item {
@@ -34,18 +57,57 @@
   margin-bottom: 8px;
 }
 
-.filter-item button {
-  width: 100%;
-  margin-bottom: 8px;
-  font-size: 0.875rem;
-  padding: 8px;
-  border-radius: 4px;
+/* Quality Gate Buttons */
+
+/* Unselected (Outlined) Buttons */
+.btn-outline-success {
+  color: #28a745; /* Green text */
+  border-color: #28a745;
+  background-color: transparent; /* Transparent background */
 }
 
-.filter-item .list-group {
-  margin-top: 8px;
+.btn-outline-danger {
+  color: #dc3545; /* Red text */
+  border-color: #dc3545;
+  background-color: transparent; /* Transparent background */
 }
 
+/* Hover state for unselected buttons */
+.btn-outline-success:hover {
+  background-color: #28a745; /* Green background on hover */
+  color: #fff; /* White text on hover */
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545; /* Red background on hover */
+  color: #fff; /* White text on hover */
+}
+
+/* Selected (Solid) Buttons */
+.btn-success {
+  background-color: #28a745; /* Green background */
+  color: #fff; /* White text */
+  border-color: #28a745;
+}
+
+.btn-danger {
+  background-color: #dc3545; /* Red background */
+  color: #fff; /* White text */
+  border-color: #dc3545;
+}
+
+/* Hover state for selected buttons */
+.btn-success:hover {
+  background-color: #218838; /* Slightly darker green */
+}
+
+.btn-danger:hover {
+  background-color: #c82333; /* Slightly darker red */
+}
+
+/* Filter List Items */
+
+/* Default state */
 .filter-item .list-group-item {
   display: flex;
   justify-content: space-between;
@@ -54,14 +116,32 @@
   padding: 8px;
   border: 1px solid #ddd;
   margin-bottom: 8px;
-  background-color: #fff;
+  background-color: #fff; /* White background */
   border-radius: 4px;
+  cursor: pointer;
+  color: #212529; /* Dark text */
 }
 
+/* Hover state */
 .filter-item .list-group-item:hover {
-  background-color: #f1f1f1;
+  background-color: #f1f1f1; /* Light gray background on hover */
+  color: #212529; /* Keep text dark */
 }
 
+/* Selected (Active) state */
+.list-group-item.active {
+  background-color: #007bff !important;
+  color: #fff !important;
+  border-color: #007bff !important;
+}
+
+/* Ensure the badge contrasts with the background */
+.list-group-item.active .badge {
+  background-color: #fff; /* White background */
+  color: #007bff; /* Blue text */
+}
+
+/* Style the badge */
 .filter-item .badge {
   font-size: 0.75rem;
   padding: 4px 6px;

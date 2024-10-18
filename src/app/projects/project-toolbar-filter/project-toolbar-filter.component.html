@@ -9,8 +9,9 @@
       <option value="">Search by group</option>
       <option *ngFor="let group of projectGroups" [value]="group">{{ group }}</option>
     </select>
-    <select class="form-select filter-select">
-      <option>Sort by</option>
+    <select class="form-select filter-select" [(ngModel)]="selectedSort" (ngModelChange)="onSortChange($event)">
+      <option value="">Sort by</option>
+      <option *ngFor="let option of sortOptions" [value]="option.value">{{ option.text }}</option>
     </select>
   </div>
 </div>
