@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as _ from 'lodash';
-import { FilterCriteria } from '../interfaces/filter-criteria';
-import { SonarQubeProjectData, SonarQubeProjectGroupData } from '../../shared/services/sonarqube-project.data';
+import { SonarQubeProjectGroupData } from '../../shared/services/sonarqube-project.data';
 import { SonarQubeProjectDataService } from '../../shared/services/sonarqube-project-data.service';
+import { FilterCriteria } from '../interfaces/filter-criteria';
+import * as _ from 'lodash';
+import { FilteringService } from '../services/filtering.service';
 
 @Component({
   selector: 'app-project-list',
@@ -17,153 +18,28 @@ export class ProjectListComponent implements OnInit {
 
   noProjectsFound: boolean = false;
 
-  constructor(private sonarQubeProjectDataService: SonarQubeProjectDataService) {
+  constructor(
+    private sonarQubeProjectDataService: SonarQubeProjectDataService,
+    private filteringService: FilteringService
+  ) { }
 
-  }
-
-  ngOnInit() { // Move the subscription to ngOnInit
+  ngOnInit() {
     this.sonarQubeProjectDataService.projectData$.subscribe((projectGroups: SonarQubeProjectGroupData[]) => {
       this._projectGroups = projectGroups;
     });
   }
 
-  // Getter for filtered and sorted project groups
   get projectGroups(): SonarQubeProjectGroupData[] {
     let filteredGroups = this._projectGroups || [];
 
-    // Apply filters and sorting
-    filteredGroups = this.applyFilters(filteredGroups);
+    filteredGroups = this.filteringService.applyFilters(filteredGroups, this.filterCriteria);
     filteredGroups = this.sortProjectsWithinGroups(filteredGroups);
     filteredGroups = this.sortGroupsByMetric(filteredGroups);
 
-    // Set flag to determine if any projects are found
     this.noProjectsFound = filteredGroups.length === 0;
     return filteredGroups;
   }
 
-  // Apply all filters based on filter criteria
-  private applyFilters(groups: SonarQubeProjectGroupData[]): SonarQubeProjectGroupData[] {
-    let filteredGroups = groups;
-
-    if (this.filterCriteria.searchTerm) {
-      filteredGroups = this.applySearchFilter(filteredGroups, this.filterCriteria.searchTerm);
-    }
-
-    if (this.filterCriteria.group) {
-      filteredGroups = this.applyGroupFilter(filteredGroups, this.filterCriteria.group);
-    }
-
-    if (this.filterCriteria.qualityGate) {
-      filteredGroups = this.applyQualityGateFilter(filteredGroups, this.filterCriteria.qualityGate);
-    }
-
-    // Apply ratings filters
-    filteredGroups = this.applyRatingsFilters(filteredGroups, this.filterCriteria);
-
-    return filteredGroups;
-  }
-
-  // Apply search term filter
-  private applySearchFilter(groups: SonarQubeProjectGroupData[], searchTerm: string): SonarQubeProjectGroupData[] {
-    const lowerFilter = searchTerm.toLowerCase();
-
-    return groups
-      .map(group => {
-        const filteredProjects = group.projects.filter(project =>
-          project.projectName.toLowerCase().includes(lowerFilter)
-        );
-        const groupMatches = group.name.toLowerCase().includes(lowerFilter);
-
-        if (filteredProjects.length > 0 || groupMatches) {
-          return { ...group, projects: filteredProjects };
-        }
-        return null;
-      })
-      .filter((group): group is SonarQubeProjectGroupData => group !== null);
-  }
-
-  // Apply group filter
-  private applyGroupFilter(groups: SonarQubeProjectGroupData[], groupName: string): SonarQubeProjectGroupData[] {
-    return groups.filter(group => group.name === groupName);
-  }
-
-  // Apply quality gate filter
-  private applyQualityGateFilter(groups: SonarQubeProjectGroupData[], status: string): SonarQubeProjectGroupData[] {
-    return groups
-      .map(group => {
-        const filteredProjects = group.projects.filter(project => {
-          const metric = project.metrics.find(m => m.name === 'alert_status');
-          return metric && metric.value === status;
-        });
-        if (filteredProjects.length > 0) {
-          return { ...group, projects: filteredProjects };
-        }
-        return null;
-      })
-      .filter((group): group is SonarQubeProjectGroupData => group !== null);
-  }
-
-  // Apply ratings filters
-  private applyRatingsFilters(groups: SonarQubeProjectGroupData[], criteria: FilterCriteria): SonarQubeProjectGroupData[] {
-    return groups
-      .map(group => {
-        const filteredProjects = group.projects.filter(project => {
-          // Check each rating filter
-          const matchesReliability = this.matchesRating(
-            project,
-            'reliability_rating',
-            criteria.reliabilityRatings
-          );
-          const matchesSecurity = this.matchesRating(
-            project,
-            'security_rating',
-            criteria.securityRatings
-          );
-          const matchesMaintainability = this.matchesRating(
-            project,
-            'sqale_rating',
-            criteria.maintainabilityRatings
-          );
-          const matchesCoverage = this.matchesRating(
-            project,
-            'coverage',
-            criteria.coverageRatings
-          );
-          const matchesDuplication = this.matchesRating(
-            project,
-            'duplicated_lines_density',
-            criteria.duplicationRatings
-          );
-
-          // Project matches if it satisfies all provided rating filters
-          return (
-            (criteria.reliabilityRatings ? matchesReliability : true) &&
-            (criteria.securityRatings ? matchesSecurity : true) &&
-            (criteria.maintainabilityRatings ? matchesMaintainability : true) &&
-            (criteria.coverageRatings ? matchesCoverage : true) &&
-            (criteria.duplicationRatings ? matchesDuplication : true)
-          );
-        });
-
-        if (filteredProjects.length > 0) {
-          return { ...group, projects: filteredProjects };
-        }
-        return null;
-      })
-      .filter((group): group is SonarQubeProjectGroupData => group !== null);
-  }
-
-  // Helper to check if a project matches the rating criteria
-  private matchesRating(project: SonarQubeProjectData, metricName: string, ratings?: string[]): boolean | undefined {
-    if (!ratings || ratings.length === 0) {
-      return true;
-    }
-
-    const metric = project.metrics.find(m => m.name === metricName);
-    return metric && ratings.includes(metric.value.toString());
-  }
-
-  // Sort projects within each group based on selected metric
   private sortProjectsWithinGroups(groups: SonarQubeProjectGroupData[]): SonarQubeProjectGroupData[] {
     if (!this.filterCriteria.sortBy) {
       return groups;
@@ -179,7 +55,6 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
-  // Sort groups based on the highest metric value of their projects
   private sortGroupsByMetric(groups: SonarQubeProjectGroupData[]): SonarQubeProjectGroupData[] {
     if (!this.filterCriteria.sortBy) {
       return groups;
@@ -192,13 +67,11 @@ export class ProjectListComponent implements OnInit {
     );
   }
 
-  // Helper to get metric value from a project
-  private getMetricValue(project: SonarQubeProjectData, metricName: string | undefined): number {
-    const metric = project.metrics.find(m => m.name === metricName);
+  private getMetricValue(project: any, metricName: any): number { // Type 'any' used for simplicity
+    const metric = project.metrics.find((m: { name: any; }) => m.name === metricName);
     return this.parseMetricValue(metric ? metric.value : '0');
   }
 
-  // Helper to get the highest metric value from a group's projects
   private getGroupMetricValue(group: SonarQubeProjectGroupData, metricName: string | undefined): number {
     if (!group.projects.length) {
       return 0;
@@ -209,7 +82,6 @@ export class ProjectListComponent implements OnInit {
     return highestValue ? this.getMetricValue(highestValue, metricName) : 0;
   }
 
-  // Function to parse metric values
   private parseMetricValue(value: string | number): number {
     if (typeof value === 'number') {
       return value;
@@ -221,12 +93,10 @@ export class ProjectListComponent implements OnInit {
 
     let stringValue = value.toString().trim();
 
-    // Remove '%' sign
     if (stringValue.endsWith('%')) {
       stringValue = stringValue.slice(0, -1);
     }
 
-    // Handle 'k' and 'M' suffixes
     let multiplier = 1;
     if (stringValue.endsWith('k')) {
       multiplier = 1000;
@@ -236,7 +106,6 @@ export class ProjectListComponent implements OnInit {
       stringValue = stringValue.slice(0, -1);
     }
 
-    // Remove commas
     stringValue = stringValue.replace(/,/g, '');
 
     const num = parseFloat(stringValue);

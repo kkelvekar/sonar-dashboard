@@ -14,7 +14,7 @@ export interface SonarQubeProjectData {
 
 export interface SonarQubeProjectMetricData {
   name: string;
-  value: string | number;
+  value: any;
 }
 
 
