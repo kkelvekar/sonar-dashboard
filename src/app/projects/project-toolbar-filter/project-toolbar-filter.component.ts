@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ProjectService } from '../services/project.service';
-import { ProjectGroup } from '../interfaces/projectGroup';
+import { SonarQubeProjectService } from '../../shared/services/sonarqube-project.service';
 import { SortOption, SortOptions } from './toolbar-filter-data';
+import { SonarQubeProjectGroupData } from '../../shared/services/sonarqube-project.data';
+import { SonarQubeProjectDataService } from '../../shared/services/sonarqube-project-data.service';
 
 @Component({
   selector: 'project-toolbar-filter',
@@ -19,9 +20,9 @@ export class ProjectToolbarFilterComponent {
   @Output() groupChange = new EventEmitter<string>();
   @Output() sortChange = new EventEmitter<string>();
 
-  constructor(private projectService: ProjectService){
+  constructor(private projectService: SonarQubeProjectService, private sonarQubeProjectDataService: SonarQubeProjectDataService, ){
     this.sortOptions = SortOptions;
-    this.projectService.projectData$.subscribe((projectGroups: ProjectGroup[]) => {
+    this.sonarQubeProjectDataService.projectData$.subscribe((projectGroups: SonarQubeProjectGroupData[]) => {
       this.projectGroups = projectGroups.map(group => group.name);
     });
   }

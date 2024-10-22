@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-
-import { SonarQubeMetricsServiceService } from './sonarqube-metrics.service';
+import { SonarQubeMetricsService } from './sonarqube-metrics.service';
 
 describe('SonarQubeMetricsServiceService', () => {
-  let service: SonarQubeMetricsServiceService;
+  let service: SonarQubeMetricsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SonarQubeMetricsServiceService);
+    service = TestBed.inject(SonarQubeMetricsService);
   });
 
   it('should be created', () => {

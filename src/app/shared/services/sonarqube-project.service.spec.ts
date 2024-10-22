@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ProjectService } from './project.service';
+import { SonarQubeProjectService } from './sonarqube-project.service';
 
 describe('ProjectService', () => {
-  let service: ProjectService;
+  let service: SonarQubeProjectService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ProjectService);
+    service = TestBed.inject(SonarQubeProjectService);
   });
 
   it('should be created', () => {

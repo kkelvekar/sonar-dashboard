@@ -1,15 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FilterCriteria } from './projects/interfaces/filter-criteria';
+import { SonarQubeProjectService } from './shared/services/sonarqube-project.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'] // Note: styleUrls instead of styleUrl
 })
-export class AppComponent {
-  title = 'sonarqube-dashboard';
+export class AppComponent implements OnInit {
 
+  title: string = '';
   filterCriteria: FilterCriteria = {};
+
+  constructor(private sonarQubeProjectService: SonarQubeProjectService) {
+
+  }
+
+  ngOnInit(): void {
+    this.sonarQubeProjectService.getProjectsByGroup().subscribe();
+  }
 
   onFilterChange(criteria: FilterCriteria) {
     this.filterCriteria = criteria;

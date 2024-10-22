@@ -1,31 +1,34 @@
-import { Component, Input } from '@angular/core';
-import { ProjectGroup } from '../interfaces/projectGroup';
-import { ProjectService } from '../services/project.service';
+import { Component, Input, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { Project } from '../interfaces/project';
 import { FilterCriteria } from '../interfaces/filter-criteria';
+import { SonarQubeProjectData, SonarQubeProjectGroupData } from '../../shared/services/sonarqube-project.data';
+import { SonarQubeProjectDataService } from '../../shared/services/sonarqube-project-data.service';
 
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
   styleUrls: ['./project-list.component.css']
 })
-export class ProjectListComponent {
+export class ProjectListComponent implements OnInit {
 
   @Input() filterCriteria: FilterCriteria = {};
 
-  private _projectGroups: ProjectGroup[] = [];
+  private _projectGroups: SonarQubeProjectGroupData[] = [];
 
   noProjectsFound: boolean = false;
 
-  constructor(private projectService: ProjectService) {
-    this.projectService.getProjectsByGroup().subscribe((projectGroups: ProjectGroup[]) => {
+  constructor(private sonarQubeProjectDataService: SonarQubeProjectDataService) {
+
+  }
+
+  ngOnInit() { // Move the subscription to ngOnInit
+    this.sonarQubeProjectDataService.projectData$.subscribe((projectGroups: SonarQubeProjectGroupData[]) => {
       this._projectGroups = projectGroups;
     });
   }
 
   // Getter for filtered and sorted project groups
-  get projectGroups(): ProjectGroup[] {
+  get projectGroups(): SonarQubeProjectGroupData[] {
     let filteredGroups = this._projectGroups || [];
 
     // Apply filters and sorting
@@ -39,7 +42,7 @@ export class ProjectListComponent {
   }
 
   // Apply all filters based on filter criteria
-  private applyFilters(groups: ProjectGroup[]): ProjectGroup[] {
+  private applyFilters(groups: SonarQubeProjectGroupData[]): SonarQubeProjectGroupData[] {
     let filteredGroups = groups;
 
     if (this.filterCriteria.searchTerm) {
@@ -61,7 +64,7 @@ export class ProjectListComponent {
   }
 
   // Apply search term filter
-  private applySearchFilter(groups: ProjectGroup[], searchTerm: string): ProjectGroup[] {
+  private applySearchFilter(groups: SonarQubeProjectGroupData[], searchTerm: string): SonarQubeProjectGroupData[] {
     const lowerFilter = searchTerm.toLowerCase();
 
     return groups
@@ -76,16 +79,16 @@ export class ProjectListComponent {
         }
         return null;
       })
-      .filter((group): group is ProjectGroup => group !== null);
+      .filter((group): group is SonarQubeProjectGroupData => group !== null);
   }
 
   // Apply group filter
-  private applyGroupFilter(groups: ProjectGroup[], groupName: string): ProjectGroup[] {
+  private applyGroupFilter(groups: SonarQubeProjectGroupData[], groupName: string): SonarQubeProjectGroupData[] {
     return groups.filter(group => group.name === groupName);
   }
 
   // Apply quality gate filter
-  private applyQualityGateFilter(groups: ProjectGroup[], status: string): ProjectGroup[] {
+  private applyQualityGateFilter(groups: SonarQubeProjectGroupData[], status: string): SonarQubeProjectGroupData[] {
     return groups
       .map(group => {
         const filteredProjects = group.projects.filter(project => {
@@ -97,11 +100,11 @@ export class ProjectListComponent {
         }
         return null;
       })
-      .filter((group): group is ProjectGroup => group !== null);
+      .filter((group): group is SonarQubeProjectGroupData => group !== null);
   }
 
   // Apply ratings filters
-  private applyRatingsFilters(groups: ProjectGroup[], criteria: FilterCriteria): ProjectGroup[] {
+  private applyRatingsFilters(groups: SonarQubeProjectGroupData[], criteria: FilterCriteria): SonarQubeProjectGroupData[] {
     return groups
       .map(group => {
         const filteredProjects = group.projects.filter(project => {
@@ -147,11 +150,11 @@ export class ProjectListComponent {
         }
         return null;
       })
-      .filter((group): group is ProjectGroup => group !== null);
+      .filter((group): group is SonarQubeProjectGroupData => group !== null);
   }
 
   // Helper to check if a project matches the rating criteria
-  private matchesRating(project: Project, metricName: string, ratings?: string[]): boolean | undefined {
+  private matchesRating(project: SonarQubeProjectData, metricName: string, ratings?: string[]): boolean | undefined {
     if (!ratings || ratings.length === 0) {
       return true;
     }
@@ -161,7 +164,7 @@ export class ProjectListComponent {
   }
 
   // Sort projects within each group based on selected metric
-  private sortProjectsWithinGroups(groups: ProjectGroup[]): ProjectGroup[] {
+  private sortProjectsWithinGroups(groups: SonarQubeProjectGroupData[]): SonarQubeProjectGroupData[] {
     if (!this.filterCriteria.sortBy) {
       return groups;
     }
@@ -177,7 +180,7 @@ export class ProjectListComponent {
   }
 
   // Sort groups based on the highest metric value of their projects
-  private sortGroupsByMetric(groups: ProjectGroup[]): ProjectGroup[] {
+  private sortGroupsByMetric(groups: SonarQubeProjectGroupData[]): SonarQubeProjectGroupData[] {
     if (!this.filterCriteria.sortBy) {
       return groups;
     }
@@ -190,13 +193,13 @@ export class ProjectListComponent {
   }
 
   // Helper to get metric value from a project
-  private getMetricValue(project: Project, metricName: string | undefined): number {
+  private getMetricValue(project: SonarQubeProjectData, metricName: string | undefined): number {
     const metric = project.metrics.find(m => m.name === metricName);
     return this.parseMetricValue(metric ? metric.value : '0');
   }
 
   // Helper to get the highest metric value from a group's projects
-  private getGroupMetricValue(group: ProjectGroup, metricName: string | undefined): number {
+  private getGroupMetricValue(group: SonarQubeProjectGroupData, metricName: string | undefined): number {
     if (!group.projects.length) {
       return 0;
     }

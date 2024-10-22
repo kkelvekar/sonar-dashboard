@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Project } from '../interfaces/project';
+import { SonarQubeProjectData } from '../../shared/services/sonarqube-project.data';
+
 
 @Component({
   selector: 'app-project-item',
@@ -8,7 +9,11 @@ import { Project } from '../interfaces/project';
 })
 export class ProjectItemComponent {
   @Input()
-  projectItem!: Project;
+  projectItem!: SonarQubeProjectData;
+
+  constructor() {
+
+  }
 
   // Helper method to find a metric by name
   getMetricValue(metricName: string): string | number | undefined {

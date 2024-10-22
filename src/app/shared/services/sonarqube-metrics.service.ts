@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { Metric } from '../interfaces/metric';
+import { SonarQubeProjectMetricData } from './sonarqube-project.data';
 
 // Configurable Base URL and Token
 const BASE_URL = environment.sonarBaseUrl; // e.g., 'http://localhost:9000/api/project_badges/measure'
@@ -34,7 +34,7 @@ export class SonarQubeMetricsService {
   constructor(private http: HttpClient) {}
 
   // Function to fetch metrics for a given project
-  getProjectMetrics(projectKey: string, projectToken: string): Observable<Metric[]> {
+  getProjectMetrics(projectKey: string, projectToken: string): Observable<SonarQubeProjectMetricData[]> {
     const requests = METRICS.map((metric) => {
       const url = `${BASE_URL}?project=${projectKey}&metric=${metric}&token=${projectToken}`;
       return this.http.get(url, { responseType: 'text' }).pipe(
@@ -47,7 +47,7 @@ export class SonarQubeMetricsService {
   }
 
   // Function to parse SVG and extract metric value
-  private parseMetricFromSvg(svg: string, metric: string): Metric {
+  private parseMetricFromSvg(svg: string, metric: string): SonarQubeProjectMetricData {
     const parser = new DOMParser();
     const svgDoc = parser.parseFromString(svg, 'image/svg+xml');
     //console.log(svg);
