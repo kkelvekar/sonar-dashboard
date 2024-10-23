@@ -10,6 +10,6 @@ export const SortOptions: SortOption[] = [
   { text: 'Code Smells', value: 'code_smells' },
   { text: 'Coverage', value: 'coverage' },
   { text: 'Duplication', value: 'duplicated_lines_density' },
-  { text: 'Lines of code', value: 'ncloc' }
+  { text: 'Lines of code', value: 'lineOfCode' }
 ];
 

@@ -1,10 +1,10 @@
-<div class="card-container" *ngFor="let projectGroup of projectGroups">
+<div class="card-container" *ngFor="let processedProjectGroup of processedProjectGroupList">
   <!-- Render project group -->
-  <app-project-group [projectGroup]="projectGroup"></app-project-group>
+  <app-project-group [projectGroup]="processedProjectGroup.projectGroup"></app-project-group>
 
   <!-- Loop through each project in the current project group without adding extra elements to the DOM -->
-  <ng-container *ngFor="let project of projectGroup.projects">
-    <app-project-item [projectItem]="project"></app-project-item>
+  <ng-container *ngFor="let projectItem of processedProjectGroup.projectItems">
+    <app-project-item [projectItem]="projectItem"></app-project-item>
   </ng-container>
 </div>
  <!-- If no projects match, show a message -->

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SonarQubeProjectGroupData } from '../../shared/services/sonarqube-project.data';
+import { ProjectGroup } from './project-group';
 
 @Component({
   selector: 'app-project-group',
@@ -9,5 +9,5 @@ import { SonarQubeProjectGroupData } from '../../shared/services/sonarqube-proje
 export class ProjectGroupComponent {
 
   @Input()
-  projectGroup!: SonarQubeProjectGroupData;
+  projectGroup!: ProjectGroup;
 }

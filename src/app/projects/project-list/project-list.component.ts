@@ -2,9 +2,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SonarQubeProjectGroupData } from '../../shared/services/sonarqube-project.data';
 import { SonarQubeProjectDataService } from '../../shared/services/sonarqube-project-data.service';
-import { FilterCriteria } from '../interfaces/filter-criteria';
+import { FilterCriteria } from '../shared/interfaces/filter-criteria';
 import { FilteringService } from '../services/filtering.service';
 import { SortingService } from '../services/sorting.service';
+import { ProjectDataService } from '../services/project.data.service';
+import { ProjectList } from './project-list';
 
 
 @Component({
@@ -16,30 +18,29 @@ export class ProjectListComponent implements OnInit {
 
   @Input() filterCriteria: FilterCriteria = {};
 
-  private _projectGroups: SonarQubeProjectGroupData[] = [];
-
+  projectList: ProjectList[] = [];
   noProjectsFound: boolean = false;
 
   constructor(
-    private sonarQubeProjectDataService: SonarQubeProjectDataService,
+    private projectDataService: ProjectDataService,
     private filteringService: FilteringService,
     private sortingService: SortingService // Inject SortingService
   ) { }
 
   ngOnInit() {
-    this.sonarQubeProjectDataService.projectData$.subscribe((projectGroups: SonarQubeProjectGroupData[]) => {
-      this._projectGroups = projectGroups;
+    this.projectDataService.projectList$.subscribe(data => {
+      this.projectList = data;
     });
   }
 
-  get projectGroups(): SonarQubeProjectGroupData[] {
-    let filteredGroups = this._projectGroups || [];
+  get processedProjectGroupList(): ProjectList[] {
+    let _processedProjectGroupList = this.projectList || [];
 
-    filteredGroups = this.filteringService.applyFilters(filteredGroups, this.filterCriteria);
-    filteredGroups = this.sortingService.sortProjectsWithinGroups(filteredGroups, this.filterCriteria.sortBy); // Use SortingService
-    filteredGroups = this.sortingService.sortGroupsByMetric(filteredGroups, this.filterCriteria.sortBy); // Use SortingService
+    _processedProjectGroupList = this.filteringService.applyFilters(_processedProjectGroupList, this.filterCriteria);
+    _processedProjectGroupList = this.sortingService.sortProjectsWithinGroups(_processedProjectGroupList, this.filterCriteria.sortBy); // Use SortingService
+    _processedProjectGroupList = this.sortingService.sortGroupsByMetric(_processedProjectGroupList, this.filterCriteria.sortBy); // Use SortingService
 
-    this.noProjectsFound = filteredGroups.length === 0;
-    return filteredGroups;
+    this.noProjectsFound = _processedProjectGroupList.length === 0;
+    return _processedProjectGroupList;
   }
 }

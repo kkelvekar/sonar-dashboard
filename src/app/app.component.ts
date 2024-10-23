@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FilterCriteria } from './projects/interfaces/filter-criteria';
+import { FilterCriteria } from './projects/shared/interfaces/filter-criteria';
 import { SonarQubeProjectService } from './shared/services/sonarqube-project.service';
 
 @Component({

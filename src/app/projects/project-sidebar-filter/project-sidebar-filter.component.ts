@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { FilterCriteria } from '../interfaces/filter-criteria';
+import { FilterCriteria } from '../shared/interfaces/filter-criteria';
 
 @Component({
   selector: 'project-sidebar-filter',

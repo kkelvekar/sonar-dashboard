@@ -1,7 +1,9 @@
 // sorting.service.ts
 import { Injectable } from '@angular/core';
-import { SonarQubeProjectGroupData } from '../../shared/services/sonarqube-project.data';
+
 import * as _ from 'lodash';
+import { ProjectItem } from '../project-list/project-item/project-item';
+import { ProjectList } from '../project-list/project-list';
 
 @Injectable({
   providedIn: 'root'
@@ -10,35 +12,35 @@ export class SortingService {
 
   constructor() { }
 
-  sortProjectsWithinGroups(groups: SonarQubeProjectGroupData[], sortBy: string | undefined): SonarQubeProjectGroupData[] {
+  sortProjectsWithinGroups(groups: ProjectList[], sortBy: string | undefined): ProjectList[] {
     if (!sortBy) {
       return groups;
     }
 
     return groups.map(group => ({
       ...group,
-      projects: _.orderBy(group.projects, project => this.getMetricValue(project, sortBy), 'desc')
+      projectItems: _.orderBy(group.projectItems, project => this.getMetricValue(project, sortBy), 'desc')
     }));
   }
 
-  sortGroupsByMetric(groups: SonarQubeProjectGroupData[], sortBy: string | undefined): SonarQubeProjectGroupData[] {
+  sortGroupsByMetric(groups: ProjectList[], sortBy: string | undefined): ProjectList[] {
     return this.sortGroups(groups, sortBy);
   }
 
-  private sortGroups(groups: SonarQubeProjectGroupData[], sortBy: string | undefined): SonarQubeProjectGroupData[] {
+  private sortGroups(groups: ProjectList[], sortBy: string | undefined): ProjectList[] {
     if (!sortBy) {
       return groups;
     }
 
     return _.orderBy(groups, group => {
-      const highestValue = _.maxBy(group.projects, project => this.getMetricValue(project, sortBy));
+      const highestValue = _.maxBy(group.projectItems, project => this.getMetricValue(project, sortBy));
       return highestValue ? this.getMetricValue(highestValue, sortBy) : 0;
     }, 'desc');
   }
 
-  private getMetricValue(item: any, metricName: string | undefined): number {
-    const metric = item.metrics.find((m: { name: string; value: string | number }) => m.name === metricName);
-    return this.parseMetricValue(metric ? metric.value : '0');
+  private getMetricValue(item: ProjectItem, metricName: string): number {
+    const value = item[metricName as keyof ProjectItem];
+    return this.parseMetricValue(value);
   }
 
   parseMetricValue(value: string | number): number {
@@ -50,7 +52,7 @@ export class SortingService {
       return 0;
     }
 
-    const match = value.toString().trim().match(/(\d+(?:\.\d+)?)([kM])?/); // Removed '%' from regex
+    const match = value.toString().trim().match(/(\d+(?:\.\d+)?)([kM])?/);
     if (match) {
       let num = parseFloat(match[1]);
       const unit = match[2];

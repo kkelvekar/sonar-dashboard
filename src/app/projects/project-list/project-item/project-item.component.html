@@ -1,24 +1,24 @@
 <div class="card-custom">
   <div class="card-header">
     <h5>
-      <a href="#">{{ projectItem.projectName }}</a>
+      <a href="#">{{ projectItem.name }}</a>
       <span
         class="badge ms-2"
         [ngClass]="isAlertStatusPassed() ? 'passed-badge' : 'failed-badge'"
       >
-        {{ getMetricValue('alert_status')?.toString() | uppercase }}
+        {{ projectItem.qualityGate| uppercase }}
       </span>
     </h5>
     <!-- Lines of Code moved to header -->
-    <div class="loc" *ngIf="getMetricValue('ncloc')">
+    <div class="loc" *ngIf="projectItem.lineOfCode">
       <i class="metric-icon bi bi-file-earmark-lines"></i>
-      <span class="metric-value">{{ getMetricValue('ncloc') }} Lines of code</span>
+      <span class="metric-value">{{ projectItem.lineOfCode }} Lines of code</span>
     </div>
   </div>
 
   <div class="metrics-row">
     <!-- Bugs Metric -->
-    <div class="metric-item" *ngIf="getMetricValue('bugs')">
+    <div class="metric-item" *ngIf="projectItem.bugs">
       <div class="metric-header">
         <i class="metric-icon bi bi-bug"></i>
         <div class="metric-title">Bugs</div>
@@ -26,16 +26,16 @@
       <div class="metric-content">
         <div
           class="metric-rating"
-          [ngClass]="getRatingValue('reliability_rating')"
+          [ngClass]="projectItem.reliability_rating"
         >
-          {{ getMetricValue('reliability_rating') }}
+          {{ projectItem.reliability_rating }}
         </div>
-        <div class="metric-value">{{ getMetricValue('bugs') }}</div>
+        <div class="metric-value">{{ projectItem.bugs }}</div>
       </div>
     </div>
 
     <!-- Vulnerabilities Metric -->
-    <div class="metric-item" *ngIf="getMetricValue('vulnerabilities')">
+    <div class="metric-item" *ngIf="projectItem.vulnerabilities">
       <div class="metric-header">
         <i class="metric-icon bi bi-lock"></i>
         <div class="metric-title">Vulnerabilities</div>
@@ -43,16 +43,16 @@
       <div class="metric-content">
         <div
           class="metric-rating"
-          [ngClass]="getRatingValue('security_rating')"
+          [ngClass]="projectItem.security_rating"
         >
-          {{ getMetricValue('security_rating') }}
+          {{ projectItem.security_rating }}
         </div>
-        <div class="metric-value">{{ getMetricValue('vulnerabilities') }}</div>
+        <div class="metric-value">{{ projectItem.vulnerabilities }}</div>
       </div>
     </div>
 
     <!-- Hotspots Reviewed Metric -->
-    <div class="metric-item" *ngIf="getMetricValue('security_hotspots')">
+    <div class="metric-item" *ngIf="projectItem.security_hotspots">
       <div class="metric-header">
         <i class="metric-icon bi bi-shield-shaded"></i>
         <div class="metric-title">Hotspots Reviewed</div>
@@ -60,18 +60,18 @@
       <div class="metric-content">
         <div
           class="metric-rating"
-          [ngClass]="getRatingValue('security_review_rating')"
+          [ngClass]="projectItem.security_review_rating"
         >
-          {{ getRatingValue('security_review_rating') }}
+          {{ projectItem.security_review_rating }}
         </div>
         <div class="metric-value">
-          {{ getMetricValue('security_hotspots') }}%
+          {{ projectItem.security_hotspots }}%
         </div>
       </div>
     </div>
 
     <!-- Code Smells Metric -->
-    <div class="metric-item" *ngIf="getMetricValue('code_smells')">
+    <div class="metric-item" *ngIf="projectItem.code_smells">
       <div class="metric-header">
         <i class="metric-icon bi bi-radioactive"></i>
         <div class="metric-title">Code Smells</div>
@@ -79,16 +79,16 @@
       <div class="metric-content">
         <div
           class="metric-rating"
-          [ngClass]="getRatingValue('sqale_rating')"
+          [ngClass]="projectItem.sqale_rating"
         >
-          {{ getMetricValue('sqale_rating') }}
+          {{ projectItem.sqale_rating }}
         </div>
-        <div class="metric-value">{{ getMetricValue('code_smells') }}</div>
+        <div class="metric-value">{{ projectItem.code_smells }}</div>
       </div>
     </div>
 
     <!-- Coverage Metric with Adjusted Circular Graph -->
-    <div class="metric-item" *ngIf="getMetricValue('coverage')">
+    <div class="metric-item" *ngIf="projectItem.coverage">
       <div class="metric-header">
         <i class="metric-icon bi bi-percent"></i>
         <div class="metric-title">Coverage</div>
@@ -106,7 +106,7 @@
             ></path>
             <path
               class="circle"
-              [attr.stroke-dasharray]="getMetricValue('coverage') + ', 100'"
+              [attr.stroke-dasharray]="projectItem.coverage + ', 100'"
               d="
                 M18 2.0845
                 a 15.9155 15.9155 0 0 1 0 31.831
@@ -115,12 +115,12 @@
             ></path>
           </svg>
         </div>
-        <div class="metric-value">{{ getMetricValue('coverage') }}%</div>
+        <div class="metric-value">{{ projectItem.coverage }}%</div>
       </div>
     </div>
 
     <!-- Duplication Metric with Adjusted Circular Graph -->
-    <div class="metric-item" *ngIf="getMetricValue('duplicated_lines_density')">
+    <div class="metric-item" *ngIf="projectItem.duplicated_lines_density">
       <div class="metric-header">
         <i class="metric-icon bi bi-files"></i>
         <div class="metric-title">Duplication</div>
@@ -138,7 +138,7 @@
             ></path>
             <path
               class="circle"
-              [attr.stroke-dasharray]="getMetricValue('duplicated_lines_density') + ', 100'"
+              [attr.stroke-dasharray]="projectItem.duplicated_lines_density + ', 100'"
               d="
                 M18 2.0845
                 a 15.9155 15.9155 0 0 1 0 31.831
@@ -148,7 +148,7 @@
           </svg>
         </div>
         <div class="metric-value">
-          {{ getMetricValue('duplicated_lines_density') }}%
+          {{ projectItem.duplicated_lines_density }}%
         </div>
       </div>
     </div>

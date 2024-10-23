@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectListComponent } from './project-list/project-list.component';
-import { ProjectItemComponent } from './project-item/project-item.component';
-import { ProjectGroupComponent } from './project-group/project-group.component';
+import { ProjectItemComponent } from './project-list/project-item/project-item.component';
+import { ProjectGroupComponent } from './project-list/project-group/project-group.component';
 import { ProjectSidebarFilterComponent } from './project-sidebar-filter/project-sidebar-filter.component';
 import { ProjectToolbarFilterComponent } from './project-toolbar-filter/project-toolbar-filter.component';
 import { provideHttpClient  } from '@angular/common/http';

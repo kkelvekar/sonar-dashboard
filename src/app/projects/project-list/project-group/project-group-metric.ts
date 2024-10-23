@@ -1,4 +1,4 @@
-import { ProjectMetricItem } from "../interfaces/project-metric-item"
+import { ProjectMetricItem } from "../../shared/interfaces/project-metric-item"
 
 export interface ProjectGroupMetric {
   groupCoverage: ProjectMetricItem
