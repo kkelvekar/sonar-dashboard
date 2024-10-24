@@ -1,32 +1,38 @@
 /* Group Header */
 .group-header {
   background-color: #f1f1f1;
-  padding: 10px;
+  padding: 8px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
+
+  /* Flexbox for horizontal alignment */
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+}
+
+.group-title {
   font-weight: bold;
+  margin-bottom: 0; /* Remove bottom margin */
 }
 
 .group-metrics {
   display: flex;
-  /* Use Flexbox */
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Allows metrics to wrap if they don't fit */
   align-items: center;
 }
 
-.group-metrics span {
-  font-size: 0.9rem;
-  margin-right: 15px;
+.group-metrics .metric-item {
   display: flex;
   align-items: center;
+  margin-right: 15px;
+  margin-bottom: 5px; /* For spacing when wrapped */
+  font-size: 0.9rem;
+  /* font-weight: bold; */
 }
 
-/* Badge SVG Styling */
-.badge-svg {
-  margin-left: 5px;
+.metric-item .badge-svg {
+  margin: 0 5px;
 }
 
 .badge-svg svg {
@@ -34,14 +40,96 @@
   width: auto;
 }
 
-/* Passed Badge */
-.passed-badge {
+/* Badge-style Ratings with Background Colors */
+.metric-item {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  margin-bottom: 5px;
+  font-size: 0.80rem;
+}
+
+.metric-item > .metric-rating {
+  margin-left: 8px; /* Add space between text and the rating box */
+}
+
+.metric-rating {
+  font-weight: bold;
+  padding: 1px 10px; /* Increase padding to make the box wider */
+  border-radius: 4px;
+  font-size: 0.80rem;
+  color: white;
+  min-width: 30px; /* Ensure the box is at least 30px wide */
+  text-align: center; /* Center the text inside the box */
+  margin-right: 5px;
+  line-height: 18px; /* Vertically center the text */
+  height: 20px; /* Match the SVG height */
+  margin-top:3px;
+}
+
+.metric-value {
+  font-weight: normal;
+  font-size: 0.80rem;
+  color: #6c757d;
+}
+
+.metric-value-graph {
+  font-weight: normal;
+  font-size: 0.80rem;
+  color: #6c757d;
+  margin-top: 3px;
+}
+
+/* Background colors for ratings */
+.metric-rating.A {
   background-color: #4caf50;
   color: white;
 }
 
-/* Adjust Badge Colors */
-.badge.bg-secondary {
-  background-color: #6c757d;
+.metric-rating.B {
+  background-color: #8bc34a;
   color: white;
+}
+
+.metric-rating.C {
+  background-color: #ffc107;
+  color: white;
+}
+
+.metric-rating.D {
+  background-color: #ff9800;
+  color: white;
+}
+
+.metric-rating.E {
+  background-color: #f44336;
+  color: white;
+}
+
+
+/* Circular Chart Styling */
+.circular-chart.tiny {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.circular-chart.tiny svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.circular-chart.tiny .circle-bg {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 4;
+}
+
+.circular-chart.tiny .circle {
+  fill: none;
+  stroke-width: 4;
+  stroke: #4caf50;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s;
 }

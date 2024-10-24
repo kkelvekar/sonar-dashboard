@@ -1,33 +1,90 @@
- <!-- Group Header with metrics -->
- <div class="group-header">
+<!-- Group Header with metrics -->
+<div class="group-header">
   <div class="group-title">{{ projectGroup.name }}</div>
   <div class="group-metrics">
-    <span>Bugs:
-      <div class="badge-svg">
-        <!-- SVG Badge for Bugs -->
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="50">
-          <rect fill="#4caf50" width="50" height="20" rx="3"></rect>
-          <text x="25" y="14" fill="#fff" font-size="11" text-anchor="middle">A</text>
-        </svg>
+    <span class="metric-item">
+      Bugs:
+      <div class="metric-rating" [ngClass]="projectGroup.reliability_rating">
+        {{ projectGroup.reliability_rating }}
       </div>
+      <div class="metric-value">{{ projectGroup.bugs }}</div>
     </span>
-    <span>Vulnerabilities:
-      <div class="badge-svg">
-        <!-- SVG Badge for Vulnerabilities -->
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="50">
-          <rect fill="#4caf50" width="50" height="20" rx="3"></rect>
-          <text x="25" y="14" fill="#fff" font-size="11" text-anchor="middle">A</text>
-        </svg>
+    <span class="metric-item">
+      Vulnerabilities:
+      <div class="metric-rating" [ngClass]="projectGroup.security_rating">
+        {{ projectGroup.security_rating }}
       </div>
+      <div class="metric-value">{{ projectGroup.vulnerabilities }}</div>
     </span>
-    <span>Code Smells:
-      <div class="badge-svg">
-        <!-- SVG Badge for Code Smells -->
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="50">
-          <rect fill="#4caf50" width="50" height="20" rx="3"></rect>
-          <text x="25" y="14" fill="#fff" font-size="11" text-anchor="middle">A</text>
-        </svg>
+    <span class="metric-item">
+      Hotspots Reviewed:
+      <div class="metric-rating" [ngClass]="projectGroup.security_review_rating">
+        {{ projectGroup.security_review_rating }}
       </div>
+      <div class="metric-value">{{ projectGroup.security_hotspots }}</div>
+    </span>
+    <span class="metric-item">
+      Code Smells:
+      <div class="metric-rating" [ngClass]="projectGroup.sqale_rating">
+        {{ projectGroup.sqale_rating }}
+      </div>
+      <div class="metric-value">{{ projectGroup.code_smells }}</div>
+    </span>
+    <span class="metric-item">
+      Coverage:
+      <div class="badge-svg">
+        <div class="circular-chart tiny">
+          <svg viewBox="0 0 36 36">
+            <path
+              class="circle-bg"
+              d="
+                M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831
+              "
+            ></path>
+            <path
+              class="circle"
+              [attr.stroke-dasharray]="projectGroup.coverage + ', 100'"
+              d="
+                M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831
+              "
+            ></path>
+          </svg>
+        </div>
+      </div>
+      <div class="metric-value-graph">{{ projectGroup.coverage }}%</div>
+    </span>
+    <span class="metric-item">
+      Duplications:
+      <div class="badge-svg">
+        <div class="circular-chart tiny">
+          <svg viewBox="0 0 36 36">
+            <path
+              class="circle-bg"
+              d="
+                M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831
+              "
+            ></path>
+            <path
+              class="circle"
+              [attr.stroke-dasharray]="
+                projectGroup.duplicated_lines_density + ', 100'
+              "
+              d="
+                M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831
+              "
+            ></path>
+          </svg>
+        </div>
+      </div>
+      <div class="metric-value-graph">{{ projectGroup.duplicated_lines_density }}%</div>
     </span>
   </div>
 </div>

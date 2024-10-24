@@ -2,8 +2,8 @@
 import { Injectable } from '@angular/core';
 
 import * as _ from 'lodash';
-import { ProjectItem } from '../project-list/project-item/project-item';
-import { ProjectList } from '../project-list/project-list';
+import { ProjectItem } from '../../project-list/project-item/project-item';
+import { ProjectList } from '../../project-list/project-list';
 
 @Injectable({
   providedIn: 'root'

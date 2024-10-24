@@ -32,7 +32,7 @@ export class SonarQubeProjectService {
       )),
       toArray(),
       tap(result => {
-        console.log('Service result:', JSON.stringify(result, null, 2));
+        //console.log('Service result:', JSON.stringify(result, null, 2));
         this.sonarQubeProjectDataService.updateData(result);
       }),
       shareReplay(1)

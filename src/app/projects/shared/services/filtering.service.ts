@@ -1,8 +1,8 @@
 // filtering.service.ts
 import { Injectable } from '@angular/core';
-import { FilterCriteria } from '../shared/interfaces/filter-criteria';
-import { ProjectItem } from '../project-list/project-item/project-item';
-import { ProjectList } from '../project-list/project-list';
+import { FilterCriteria } from '../interfaces/filter-criteria';
+import { ProjectItem } from '../../project-list/project-item/project-item';
+import { ProjectList } from '../../project-list/project-list';
 
 @Injectable({
   providedIn: 'root'
