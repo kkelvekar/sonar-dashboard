@@ -28,95 +28,49 @@
       Failed
     </button>
   </div>
-  <!-- Reliability (Bugs) Filter -->
+  <!-- Coverage Filter -->
   <div class="filter-item">
-    <h6>Reliability (Bugs)</h6>
+    <h6>Coverage</h6>
     <ul class="list-group">
       <li
         class="list-group-item"
-        [class.active]="isRatingSelected('reliability', 'A')"
-        (click)="toggleRating('reliability', 'A')"
+        [class.active]="isCoverageSelected('>=80')"
+        (click)="toggleCoverage('>=80')"
       >
-        <span>A rating</span>
-        <span class="badge">3</span>
+        <span>≥ 80%</span>
+        <span class="badge">{{ coverageCounts['>=80'] }}</span>
       </li>
       <li
         class="list-group-item"
-        [class.active]="isRatingSelected('reliability', 'B')"
-        (click)="toggleRating('reliability', 'B')"
+        [class.active]="isCoverageSelected('70-80')"
+        (click)="toggleCoverage('70-80')"
       >
-        <span>B rating</span>
-        <span class="badge">0</span>
+        <span>70% - 80%</span>
+        <span class="badge">{{ coverageCounts['70-80'] }}</span>
       </li>
       <li
         class="list-group-item"
-        [class.active]="isRatingSelected('reliability', 'C')"
-        (click)="toggleRating('reliability', 'C')"
+        [class.active]="isCoverageSelected('50-70')"
+        (click)="toggleCoverage('50-70')"
       >
-        <span>C rating</span>
-        <span class="badge">0</span>
+        <span>50% - 70%</span>
+        <span class="badge">{{ coverageCounts['50-70'] }}</span>
       </li>
       <li
         class="list-group-item"
-        [class.active]="isRatingSelected('reliability', 'D')"
-        (click)="toggleRating('reliability', 'D')"
+        [class.active]="isCoverageSelected('30-50')"
+        (click)="toggleCoverage('30-50')"
       >
-        <span>D rating</span>
-        <span class="badge">0</span>
+        <span>30% - 50%</span>
+        <span class="badge">{{ coverageCounts['30-50'] }}</span>
       </li>
       <li
         class="list-group-item"
-        [class.active]="isRatingSelected('reliability', 'E')"
-        (click)="toggleRating('reliability', 'E')"
+        [class.active]="isCoverageSelected('<30')"
+        (click)="toggleCoverage('<30')"
       >
-        <span>E rating</span>
-        <span class="badge">0</span>
-      </li>
-    </ul>
-  </div>
-  <!-- Security (Vulnerabilities) Filter -->
-  <div class="filter-item">
-    <h6>Security (Vulnerabilities)</h6>
-    <ul class="list-group">
-      <li
-        class="list-group-item"
-        [class.active]="isRatingSelected('security', 'A')"
-        (click)="toggleRating('security', 'A')"
-      >
-        <span>A rating</span>
-        <span class="badge">3</span>
-      </li>
-      <li
-        class="list-group-item"
-        [class.active]="isRatingSelected('security', 'B')"
-        (click)="toggleRating('security', 'B')"
-      >
-        <span>B rating</span>
-        <span class="badge">0</span>
-      </li>
-      <li
-        class="list-group-item"
-        [class.active]="isRatingSelected('security', 'C')"
-        (click)="toggleRating('security', 'C')"
-      >
-        <span>C rating</span>
-        <span class="badge">0</span>
-      </li>
-      <li
-        class="list-group-item"
-        [class.active]="isRatingSelected('security', 'D')"
-        (click)="toggleRating('security', 'D')"
-      >
-        <span>D rating</span>
-        <span class="badge">0</span>
-      </li>
-      <li
-        class="list-group-item"
-        [class.active]="isRatingSelected('security', 'E')"
-        (click)="toggleRating('security', 'E')"
-      >
-        <span>E rating</span>
-        <span class="badge">0</span>
+        <span>< 30%</span>
+        <span class="badge">{{ coverageCounts['<30'] }}</span>
       </li>
     </ul>
   </div>
@@ -130,7 +84,7 @@
         (click)="toggleRating('maintainability', 'A')"
       >
         <span>A rating</span>
-        <span class="badge">3</span>
+        <span class="badge">{{ ratingCounts.maintainability['A'] }}</span>
       </li>
       <li
         class="list-group-item"
@@ -138,7 +92,7 @@
         (click)="toggleRating('maintainability', 'B')"
       >
         <span>B rating</span>
-        <span class="badge">0</span>
+        <span class="badge">{{ ratingCounts.maintainability['B'] }}</span>
       </li>
       <li
         class="list-group-item"
@@ -146,7 +100,7 @@
         (click)="toggleRating('maintainability', 'C')"
       >
         <span>C rating</span>
-        <span class="badge">0</span>
+        <span class="badge">{{ ratingCounts.maintainability['C'] }}</span>
       </li>
       <li
         class="list-group-item"
@@ -154,7 +108,7 @@
         (click)="toggleRating('maintainability', 'D')"
       >
         <span>D rating</span>
-        <span class="badge">0</span>
+        <span class="badge">{{ ratingCounts.maintainability['D'] }}</span>
       </li>
       <li
         class="list-group-item"
@@ -162,36 +116,100 @@
         (click)="toggleRating('maintainability', 'E')"
       >
         <span>E rating</span>
-        <span class="badge">0</span>
+        <span class="badge">{{ ratingCounts.maintainability['E'] }}</span>
       </li>
     </ul>
   </div>
-  <!-- Uncomment and modify the following blocks if you wish to include Coverage and Duplications filters -->
-  <!-- <div class="filter-item">
-    <h6>Coverage</h6>
-    <ul class="list-group">
-      <li
-        class="list-group-item"
-        [class.active]="isRatingSelected('coverage', 'A')"
-        (click)="toggleRating('coverage', 'A')"
-      >
-        <span>A rating</span>
-        <span class="badge">3</span>
-      </li>
-
-    </ul>
-  </div>
+  <!-- Security (Vulnerabilities) Filter -->
   <div class="filter-item">
-    <h6>Duplications</h6>
+    <h6>Security (Vulnerabilities)</h6>
     <ul class="list-group">
       <li
         class="list-group-item"
-        [class.active]="isRatingSelected('duplications', 'A')"
-        (click)="toggleRating('duplications', 'A')"
+        [class.active]="isRatingSelected('security', 'A')"
+        (click)="toggleRating('security', 'A')"
       >
         <span>A rating</span>
-        <span class="badge">3</span>
+        <span class="badge">{{ ratingCounts.security['A'] }}</span>
+      </li>
+      <li
+        class="list-group-item"
+        [class.active]="isRatingSelected('security', 'B')"
+        (click)="toggleRating('security', 'B')"
+      >
+        <span>B rating</span>
+        <span class="badge">{{ ratingCounts.security['B'] }}</span>
+      </li>
+      <li
+        class="list-group-item"
+        [class.active]="isRatingSelected('security', 'C')"
+        (click)="toggleRating('security', 'C')"
+      >
+        <span>C rating</span>
+        <span class="badge">{{ ratingCounts.security['C'] }}</span>
+      </li>
+      <li
+        class="list-group-item"
+        [class.active]="isRatingSelected('security', 'D')"
+        (click)="toggleRating('security', 'D')"
+      >
+        <span>D rating</span>
+        <span class="badge">{{ ratingCounts.security['D'] }}</span>
+      </li>
+      <li
+        class="list-group-item"
+        [class.active]="isRatingSelected('security', 'E')"
+        (click)="toggleRating('security', 'E')"
+      >
+        <span>E rating</span>
+        <span class="badge">{{ ratingCounts.security['E'] }}</span>
       </li>
     </ul>
-  </div> -->
+  </div>
+  <!-- Reliability (Bugs) Filter -->
+  <div class="filter-item">
+    <h6>Reliability (Bugs)</h6>
+    <ul class="list-group">
+      <li
+        class="list-group-item"
+        [class.active]="isRatingSelected('reliability', 'A')"
+        (click)="toggleRating('reliability', 'A')"
+      >
+        <span>A rating</span>
+        <span class="badge">{{ ratingCounts.reliability['A'] }}</span>
+      </li>
+      <li
+        class="list-group-item"
+        [class.active]="isRatingSelected('reliability', 'B')"
+        (click)="toggleRating('reliability', 'B')"
+      >
+        <span>B rating</span>
+        <span class="badge">{{ ratingCounts.reliability['B'] }}</span>
+      </li>
+      <li
+        class="list-group-item"
+        [class.active]="isRatingSelected('reliability', 'C')"
+        (click)="toggleRating('reliability', 'C')"
+      >
+        <span>C rating</span>
+        <span class="badge">{{ ratingCounts.reliability['C'] }}</span>
+      </li>
+      <li
+        class="list-group-item"
+        [class.active]="isRatingSelected('reliability', 'D')"
+        (click)="toggleRating('reliability', 'D')"
+      >
+        <span>D rating</span>
+        <span class="badge">{{ ratingCounts.reliability['D'] }}</span>
+      </li>
+      <li
+        class="list-group-item"
+        [class.active]="isRatingSelected('reliability', 'E')"
+        (click)="toggleRating('reliability', 'E')"
+      >
+        <span>E rating</span>
+        <span class="badge">{{ ratingCounts.reliability['E'] }}</span>
+      </li>
+    </ul>
+  </div>
 </div>
