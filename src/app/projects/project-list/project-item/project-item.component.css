@@ -25,15 +25,6 @@
   font-size: 1rem;
 }
 
-.card-custom h5 a {
-  text-decoration: none;
-  color: #212529;
-}
-
-.card-custom h5 a:hover {
-  text-decoration: underline;
-}
-
 /* Lines of Code in Header */
 .card-custom .loc {
   display: flex;

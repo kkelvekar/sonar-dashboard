@@ -7,7 +7,16 @@
     <app-project-item [projectItem]="projectItem"></app-project-item>
   </ng-container>
 </div>
+
  <!-- If no projects match, show a message -->
  <div *ngIf="noProjectsFound" class="alert alert-warning">
   No projects found.
+</div>
+
+
+<!-- Paging controls -->
+<div class="paging-controls">
+  <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+  <span>Page {{currentPage}}</span>
+  <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage * itemsPerPage >= totalItems">Next</button>
 </div>

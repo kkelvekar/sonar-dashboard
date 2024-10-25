@@ -3,5 +3,31 @@
   margin-top: 20px;
 }
 
+/* Paging Controls Styles */
+.paging-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
+.paging-controls button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
 
+.paging-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.paging-controls span {
+  font-size: 1rem;
+  margin: 0 10px;
+}
