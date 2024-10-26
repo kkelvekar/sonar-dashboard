@@ -24,6 +24,36 @@ export class ProjectDataService {
     });
   }
 
+  public parseLineOfCodeValue(value: string): number {
+    // Remove commas and spaces
+    value = value.replace(/,/g, '').trim();
+
+    const units: { [key: string]: number } = {
+      'k': 1_000,
+      'K': 1_000,
+      'm': 1_000_000,
+      'M': 1_000_000,
+      'b': 1_000_000_000,
+      'B': 1_000_000_000,
+    };
+
+    const regex = /^([\d\.]+)([kKmMbB])?$/;
+    const match = value.match(regex);
+
+    if (match) {
+      const num = parseFloat(match[1]);
+      const unit = match[2];
+
+      if (unit && units[unit]) {
+        return num * units[unit];
+      } else {
+        return num;
+      }
+    } else {
+      return 0;
+    }
+  }
+
   private mapSonarQubeDataToProjectData(projectGroups: SonarQubeProjectGroupData[]) {
     const projectList: ProjectList[] = projectGroups.map(projectGroupData => this.mapProjectGroupData(projectGroupData));
     this._projectList.next(projectList);
@@ -56,17 +86,19 @@ export class ProjectDataService {
     return projects.map(project => ({
       name: project.projectName,
       qualityGate: this.projectMetricService.getMetricValue(project.metrics, 'alert_status') as string,
-      bugs: this.projectMetricService.getMetricValue(project.metrics, 'bugs') as number,
-      lineOfCode: this.projectMetricService.getMetricValue(project.metrics, 'ncloc') as number,
+      //qualityGate: _.sample(['passed', 'failed']) as string,
+      bugs: parseInt(this.projectMetricService.getMetricValue(project.metrics, 'bugs')),
+      lineOfCode: this.projectMetricService.getMetricValue(project.metrics, 'ncloc'),
       reliability_rating: this.projectMetricService.getRatingValue(project.metrics, 'reliability_rating'),
-      vulnerabilities: this.projectMetricService.getMetricValue(project.metrics, 'vulnerabilities') as number,
+      vulnerabilities: parseInt(this.projectMetricService.getMetricValue(project.metrics, 'vulnerabilities')),
       security_rating: this.projectMetricService.getRatingValue(project.metrics, 'security_rating'),
-      security_hotspots: this.projectMetricService.getMetricValue(project.metrics, 'security_hotspots') as number,
+      security_hotspots: parseFloat(this.projectMetricService.getMetricValue(project.metrics, 'security_hotspots')),
       security_review_rating: this.projectMetricService.getRatingValue(project.metrics, 'security_review_rating'),
-      code_smells: this.projectMetricService.getMetricValue(project.metrics, 'code_smells') as number,
+      code_smells: parseInt(this.projectMetricService.getMetricValue(project.metrics, 'code_smells')),
       sqale_rating: this.projectMetricService.getRatingValue(project.metrics, 'sqale_rating'),
-      coverage: this.projectMetricService.getMetricValue(project.metrics, 'coverage') as number,
-      duplicated_lines_density: this.projectMetricService.getMetricValue(project.metrics, 'duplicated_lines_density') as number,
+      coverage: parseFloat(this.projectMetricService.getMetricValue(project.metrics, 'coverage').toString().replace('%', '')),
+      //coverage: _.round(_.random(0, 100, true), 1),
+      duplicated_lines_density:  parseFloat(this.projectMetricService.getMetricValue(project.metrics, 'duplicated_lines_density').toString().replace('%', '')),
     }));
   }
 }

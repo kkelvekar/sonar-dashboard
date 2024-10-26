@@ -1,8 +1,8 @@
 export interface ProjectItem {
   name: string; // Project name
   qualityGate: string; // Quality gate metric
-  lineOfCode: number; // Line of code metric
   bugs: number; // Bugs metric
+  lineOfCode: string; // Line of code metric
   reliability_rating: string; // Reliability rating
   vulnerabilities: number; // Vulnerabilities metric
   security_rating: string; // Security rating

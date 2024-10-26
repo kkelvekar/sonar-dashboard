@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { SonarQubeProjectData } from '../../../shared/services/sonarqube-project.data';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProjectItem } from './project-item';
 
 
@@ -8,12 +7,16 @@ import { ProjectItem } from './project-item';
   templateUrl: './project-item.component.html',
   styleUrl: './project-item.component.css'
 })
-export class ProjectItemComponent {
+export class ProjectItemComponent implements OnInit {
   @Input()
   projectItem!: ProjectItem;
 
   constructor() {
 
+  }
+
+  ngOnInit(): void {
+    // console.log(JSON.stringify(this.projectItem));
   }
 
   getCircleValue(): string {

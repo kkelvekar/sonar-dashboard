@@ -184,6 +184,7 @@ export class ProjectSidebarFilterComponent {
     } else {
       this.selectedCoverage.push(range);
     }
+    this.filterCriteria.coverageRange = this.selectedCoverage.length > 0 ? this.selectedCoverage : undefined;
     this.emitFilterChange();
   }
 
@@ -191,6 +192,7 @@ export class ProjectSidebarFilterComponent {
     this.filterCriteria = {};
     this.selectedQualityGate = null;
     this.selectedRatings = {};
+    this.selectedCoverage = [];
     this.emitFilterChange();
   }
 

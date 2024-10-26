@@ -1,5 +1,5 @@
 // project-list.component.ts
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FilterCriteria } from '../shared/interfaces/filter-criteria';
 import { FilteringService } from '../shared/services/filtering.service';
 import { SortingService } from '../shared/services/sorting.service';
@@ -39,11 +39,22 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['filterCriteria']) {
+      this.currentPage = 1; // Reset to first page
+    }
+  }
+
   get processedProjectGroupList(): ProjectList[] {
     let processedList = this.applyFiltersAndSorting(this.projectList || []);
     this.noProjectsFound = processedList.length === 0;
     let paginatedItems = this.paginate(this.flattenProjectItems(processedList));
+    this.totalItems = this.flattenProjectItems(processedList).length; // Update totalItems here
     return this.groupByProjectGroup(paginatedItems);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
   }
 
   private applyFiltersAndSorting(projectList: ProjectList[]): ProjectList[] {

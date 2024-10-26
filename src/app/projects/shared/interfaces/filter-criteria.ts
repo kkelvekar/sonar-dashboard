@@ -6,6 +6,6 @@ export interface FilterCriteria {
   reliabilityRatings?: string[];      // e.g., ['A', 'B', 'C', 'D', 'E']
   securityRatings?: string[];
   maintainabilityRatings?: string[];
-  coverageRatings?: string[];
+  coverageRange?: string[];
   duplicationRatings?: string[];
 }

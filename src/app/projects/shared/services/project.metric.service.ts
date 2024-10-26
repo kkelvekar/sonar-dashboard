@@ -7,9 +7,9 @@ import _ from "lodash";
 })
 export class ProjectMetricService {
   // Helper method to find a metric by name
-  getMetricValue(metrics: SonarQubeProjectMetricData[], metricName: string): string | number | undefined {
+  getMetricValue(metrics: SonarQubeProjectMetricData[], metricName: string): string {
     const metric = metrics.find(m => m.name === metricName);
-    return metric ? metric.value : undefined;
+    return metric?.value as string;
   }
 
   // Helper method to find a metric by name
