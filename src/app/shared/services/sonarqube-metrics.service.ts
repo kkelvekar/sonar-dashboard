@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import _ from "lodash";
 import { SonarQubeProjectMetricData } from './sonarqube-project.data';
 
 // Configurable Base URL and Token
@@ -31,7 +32,7 @@ const METRICS = [
   providedIn: 'root',
 })
 export class SonarQubeMetricsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Function to fetch metrics for a given project
   getProjectMetrics(projectKey: string, projectToken: string): Observable<SonarQubeProjectMetricData[]> {
@@ -48,14 +49,16 @@ export class SonarQubeMetricsService {
 
   // Function to parse SVG and extract metric value
   private parseMetricFromSvg(svg: string, metric: string): SonarQubeProjectMetricData {
-    const parser = new DOMParser();
-    const svgDoc = parser.parseFromString(svg, 'image/svg+xml');
-    //console.log(svg);
-
-    // Extract the text from the <text> elements where the metric value is stored
-    const texts = svgDoc.getElementsByTagName('text');
-    const value = texts[texts.length - 1]?.textContent?.trim() || 'N/A';
-
-    return { name: metric, value };
+    // if (metric === 'coverage') {
+    //   let value = `${_.round(_.random(0, 100, true), 1)}%`;
+    //   return { name: metric, value };
+    // }
+    // else {
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(svg, 'image/svg+xml');
+      const texts = svgDoc.getElementsByTagName('text');
+      const value = texts[texts.length - 1]?.textContent?.trim() || 'N/A';
+      return { name: metric, value };
+    //}
   }
 }

@@ -1,28 +1,38 @@
 [
   {
-    "project_key":"Basket-API",
-    "project_name":"OTEL Basket API",
-    "project_group":"Group 1",
-    "project_token": "sqb_af5a96b7b9a29da14321bfccbe2714fa635a10ca"
-  }, {
-    "project_key":"Catalog-API",
-    "project_name":"OTEL Catalog API",
-    "project_group":"Group 1",
+    "project_key": "Basket-API",
+    "project_name": "OTEL Basket API",
+    "project_group": "Group 1",
+    "project_token": "sqb_15a0bcd745f6f3950b07e4cd566b7088e7c140d3"
+  },
+  {
+    "project_key": "Catalog-API",
+    "project_name": "OTEL Catalog API",
+    "project_group": "Group 1",
     "project_token": "sqb_7559d463bda9f69af4db554b71f194b8d35572f1"
-  }, {
-    "project_key":"CSharpCodingPractice",
-    "project_name":"CSharp Coding Practice",
-    "project_group":"Group 3",
+  },
+  {
+    "project_key": "Otel-Backend",
+    "project_name": "OTEL Backend",
+    "project_group": "Group 1",
+    "project_token": "sqb_d90aa5918b05c36f6380f723c4ec4c0dc0aa5ccc"
+  },
+  {
+    "project_key": "CSharpCodingPractice",
+    "project_name": "CSharp Coding Practice",
+    "project_group": "Group 3",
     "project_token": "sqb_a03e9b560cea99840033323510000b162e64101d"
-  }, {
-    "project_key":"Globo-Ticket-Management",
-    "project_name":"Globo Ticket Management",
-    "project_group":"Group 2",
+  },
+  {
+    "project_key": "Globo-Ticket-Management",
+    "project_name": "Globo Ticket Management",
+    "project_group": "Group 2",
     "project_token": "sqb_8fbb7e67c2e9ccca4c8743caab0c8798941fc104"
-  }, {
-    "project_key":"ImageGallery-Oauth2-Demo",
-    "project_name":"ImageGallery Oauth2 Demo",
-    "project_group":"Group 2",
+  },
+  {
+    "project_key": "ImageGallery-Oauth2-Demo",
+    "project_name": "ImageGallery Oauth2 Demo",
+    "project_group": "Group 2",
     "project_token": "sqb_31d9824bc0d4cabc105afee2c1f80379aa1ef649"
   }
 ]
