@@ -4,11 +4,12 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { ProjectItem } from '../../project-list/project-item/project-item';
 import { ProjectList } from '../../project-list/project-list';
+import { ProjectGroup } from '../../project-list/project-group/project-group';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SortingService {
+export class ProjectSortingService {
 
   constructor() { }
 
@@ -16,7 +17,7 @@ export class SortingService {
     if (!sortBy) {
       return groups;
     }
-
+    console.log('Sorting by:', sortBy);
     return groups.map(group => ({
       ...group,
       projectItems: _.orderBy(group.projectItems, project => this.getMetricValue(project, sortBy), 'desc')
@@ -24,26 +25,26 @@ export class SortingService {
   }
 
   sortGroupsByMetric(groups: ProjectList[], sortBy: string | undefined): ProjectList[] {
-    return this.sortGroups(groups, sortBy);
-  }
-
-  private sortGroups(groups: ProjectList[], sortBy: string | undefined): ProjectList[] {
     if (!sortBy) {
       return groups;
     }
-
-    return _.orderBy(groups, group => {
-      const highestValue = _.maxBy(group.projectItems, project => this.getMetricValue(project, sortBy));
-      return highestValue ? this.getMetricValue(highestValue, sortBy) : 0;
-    }, 'desc');
+    const result = _.orderBy(groups, group => this.getGroupMetricValue(group.projectGroup, sortBy), 'desc');
+    return result;
   }
 
   private getMetricValue(item: ProjectItem, metricName: string): number {
+    console.log(JSON.stringify(item));
     const value = item[metricName as keyof ProjectItem];
     return this.parseMetricValue(value);
   }
 
-  parseMetricValue(value: string | number): number {
+  private getGroupMetricValue(item: ProjectGroup, metricName: string): number {
+    console.log(JSON.stringify(item));
+    const value = item[metricName as keyof ProjectGroup];
+    return this.parseMetricValue(value);
+  }
+
+  parseMetricValue(value: string | number | undefined): number {
     if (typeof value === 'number') {
       return value;
     }

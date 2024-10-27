@@ -3,7 +3,7 @@ import { ProjectList } from "../../project-list/project-list";
 import { SonarQubeProjectData, SonarQubeProjectGroupData } from "../../../shared/services/sonarqube-project.data";
 import { SonarQubeProjectDataService } from "../../../shared/services/sonarqube-project-data.service";
 import _ from "lodash";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { ProjectMetricService } from "./project.metric.service";
 import { ProjectGroupService } from "./project.group.service";
 
@@ -13,6 +13,8 @@ import { ProjectGroupService } from "./project.group.service";
 export class ProjectDataService {
   private _projectList = new BehaviorSubject<ProjectList[]>([]);
   projectList$ = this._projectList.asObservable();
+
+  resetFilters$: Subject<void> = new Subject<void>();
 
   constructor(
     private sonarQubeProjectDataService: SonarQubeProjectDataService,

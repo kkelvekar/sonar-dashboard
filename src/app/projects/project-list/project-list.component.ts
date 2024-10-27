@@ -1,8 +1,8 @@
 // project-list.component.ts
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, output, SimpleChanges } from '@angular/core';
 import { FilterCriteria } from '../shared/interfaces/filter-criteria';
 import { FilteringService } from '../shared/services/filtering.service';
-import { SortingService } from '../shared/services/sorting.service';
+import { ProjectSortingService } from '../shared/services/project.sorting.service';
 import { ProjectDataService } from '../shared/services/project.data.service';
 import { ProjectList } from './project-list';
 import { ProjectItem } from './project-item/project-item';
@@ -28,7 +28,7 @@ export class ProjectListComponent implements OnInit {
   constructor(
     private projectDataService: ProjectDataService,
     private filteringService: FilteringService,
-    private sortingService: SortingService
+    private sortingService: ProjectSortingService
   ) { }
 
   ngOnInit() {
