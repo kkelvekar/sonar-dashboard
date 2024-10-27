@@ -1,38 +1,236 @@
 [
   {
-    "project_key": "Basket-API",
-    "project_name": "OTEL Basket API",
-    "project_group": "Group 1",
-    "project_token": "sqb_15a0bcd745f6f3950b07e4cd566b7088e7c140d3"
+    "project_key": "ubs.am.managing-investments.traditional.invinv-cedar.common-event-driven-architecture:cedar.common",
+    "project_name": "cedar.common",
+    "project_group": "INV-CEDAR",
+    "project_token": ""
   },
   {
-    "project_key": "Catalog-API",
-    "project_name": "OTEL Catalog API",
-    "project_group": "Group 1",
-    "project_token": "sqb_7559d463bda9f69af4db554b71f194b8d35572f1"
+    "project_key": "ubs.am.managing-investments.traditional.invinv-cedar.common-event-driven-architecture:longview-order-notification",
+    "project_name": "longview-order-notification",
+    "project_group": "INV-CEDAR",
+    "project_token": ""
   },
   {
-    "project_key": "Otel-Backend",
-    "project_name": "OTEL Backend",
-    "project_group": "Group 1",
-    "project_token": "sqb_d90aa5918b05c36f6380f723c4ec4c0dc0aa5ccc"
+    "project_key": "ubs.am.managing-investments.traditional.invinv-cedar.common-event-driven-architecture:position-keeping-service",
+    "project_name": "position-keeping-service",
+    "project_group": "INV-CEDAR",
+    "project_token": ""
   },
   {
-    "project_key": "CSharpCodingPractice",
-    "project_name": "CSharp Coding Practice",
-    "project_group": "Group 3",
-    "project_token": "sqb_a03e9b560cea99840033323510000b162e64101d"
+    "project_key": "ubs.am.managing-investments.traditional.invinv-cedar.common-event-driven-architecture:pretrade-compliance-service",
+    "project_name": "pretrade-compliance-service",
+    "project_group": "INV-CEDAR",
+    "project_token": ""
   },
   {
-    "project_key": "Globo-Ticket-Management",
-    "project_name": "Globo Ticket Management",
-    "project_group": "Group 2",
-    "project_token": "sqb_8fbb7e67c2e9ccca4c8743caab0c8798941fc104"
+    "project_key": "ubs.am.managing-investments.traditional.invinv-cedar.common-event-driven-architecture:transactions-service",
+    "project_name": "transactions-service",
+    "project_group": "INV-CEDAR",
+    "project_token": ""
   },
   {
-    "project_key": "ImageGallery-Oauth2-Demo",
-    "project_name": "ImageGallery Oauth2 Demo",
-    "project_group": "Group 2",
-    "project_token": "sqb_31d9824bc0d4cabc105afee2c1f80379aa1ef649"
+    "project_key": "ubs.am.managing-investments.traditional.invinv-cedar.common-event-driven-architecture:long-view-position-notification-service",
+    "project_name": "longview-position-notification-service",
+    "project_group": "INV-CEDAR",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-currency.common-event-driven-architecture:cash-flow-manager",
+    "project_name": "cash-flow-manager",
+    "project_group": "INV-CURRENCY",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-currency.common-event-driven-architecture:currency-management",
+    "project_name": "currency-management",
+    "project_group": "INV-CURRENCY",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:analyticsclient",
+    "project_name": "analyticsclient",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:application-logging",
+    "project_name": "application-logging",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:benchmarks-sync-job",
+    "project_name": "benchmarks-sync-job",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:data-transactions-sync-job",
+    "project_name": "data-transactions-sync-job",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:data-transactions-service",
+    "project_name": "data-transactions-service",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:data-pricing-security-process-sync-job",
+    "project_name": "data-pricing-security-process-sync-job",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:data-issues-sync-job",
+    "project_name": "data-issues-sync-job",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:data-housekeeping-job",
+    "project_name": "data-housekeeping-job",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:data-analytics-sync-job",
+    "project_name": "data-analytics-sync-job",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:data-analytics-service",
+    "project_name": "data-analytics-service",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:data-portfolio-service",
+    "project_name": "data-portfolio-service",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:data-portfolio-sync-job",
+    "project_name": "data-portfolio-sync-job",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:kafkapublishingapi",
+    "project_name": "kafkapublishingapi",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-data.common-event-driven-architecture:pricing-sync-job",
+    "project_name": "pricing-sync-job",
+    "project_group": "INV-DATA",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-optimizer.common-event-driven-architecture:optimizer-service",
+    "project_name": "optimizer-service",
+    "project_group": "INV-OPTIMIZER",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-optimizer.common-event-driven-architecture:optimizer-data-loader",
+    "project_name": "optimizer-data-loader",
+    "project_group": "INV-OPTIMIZER",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-optimizer.common-event-driven-architecture:optimizer-consumer",
+    "project_name": "optimizer-consumer",
+    "project_group": "INV-OPTIMIZER",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-optimizer.common-event-driven-architecture:optimizer-engine",
+    "project_name": "optimizer-engine",
+    "project_group": "INV-OPTIMIZER",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-platform.common-event-driven-architecture:kubernetes-admission-hooks",
+    "project_name": "kubernetes-admission-hooks",
+    "project_group": "INV-PLATFORM",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-platform.common-event-driven-architecture:messaging",
+    "project_name": "messaging",
+    "project_group": "INV-PLATFORM",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portal.common-event-driven-architecture:order-flow-manager",
+    "project_name": "order-flow-manager",
+    "project_group": "INV-PORTAL",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portal.common-event-driven-architecture:portal-service",
+    "project_name": "portal-service",
+    "project_group": "INV-PORTAL",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portal.common-event-driven-architecture:authorization-service",
+    "project_name": "authorization-service",
+    "project_group": "INV-PORTAL",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portal.common-event-driven-architecture:portfolio-viewer",
+    "project_name": "portfolio-viewer",
+    "project_group": "INV-PORTAL",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portfolioservices.common-event-driven-architecture:portfolio-service-job",
+    "project_name": "portfolio-service-job",
+    "project_group": "INV-PORTFOLIOSERVICES",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portfolioservices.common-event-driven-architecture:portfolio-calculator-sync-job",
+    "project_name": "portfolio-calculator-sync-job",
+    "project_group": "INV-PORTFOLIOSERVICES",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portfolioservices.common-event-driven-architecture:portfolio-calculator-service",
+    "project_name": "portfolio-calculator-service",
+    "project_group": "INV-PORTFOLIOSERVICES",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portfolioservices.common-event-driven-architecture:portfolio-calculator-libraries",
+    "project_name": "portfolio-calculator-libraries",
+    "project_group": "INV-PORTFOLIOSERVICES",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portfolioservices.common-event-driven-architecture:portfolio-construction-service",
+    "project_name": "portfolio-construction-service",
+    "project_group": "INV-PORTFOLIOSERVICES",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-portfolioservices.common-event-driven-architecture:portfolio-construction-gui",
+    "project_name": "portfolio-construction-gui",
+    "project_group": "INV-PORTFOLIOSERVICES",
+    "project_token": ""
+  },
+  {
+    "project_key": "ubs.am.managing-investments.traditional.invinv-strategy.common-event-driven-architecture:strategies-service",
+    "project_name": "strategies-service",
+    "project_group": "INV-STRATEGY",
+    "project_token": ""
   }
 ]
