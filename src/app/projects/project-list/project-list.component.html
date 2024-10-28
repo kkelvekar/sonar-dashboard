@@ -1,22 +1,31 @@
-<div class="card-container" *ngFor="let processedProjectGroup of processedProjectGroupList">
-  <!-- Render project group -->
-  <app-project-group [projectGroup]="processedProjectGroup.projectGroup"></app-project-group>
-
-  <!-- Loop through each project in the current project group without adding extra elements to the DOM -->
-  <ng-container *ngFor="let projectItem of processedProjectGroup.projectItems">
-    <app-project-item [projectItem]="projectItem"></app-project-item>
-  </ng-container>
+<!-- Loader -->
+<div *ngIf="isLoading" class="loader-container">
+  <div class="spinner-border text-primary" style="width: 2rem; height: 2rem;" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
 </div>
 
- <!-- If no projects match, show a message -->
- <div *ngIf="noProjectsFound" class="alert alert-warning">
-  No projects found.
-</div>
+<div *ngIf="!isLoading">
+  <div class="card-container" *ngFor="let processedProjectGroup of processedProjectGroupList">
+    <!-- Render project group -->
+    <app-project-group [projectGroup]="processedProjectGroup.projectGroup"></app-project-group>
+
+    <!-- Loop through each project in the current project group without adding extra elements to the DOM -->
+    <ng-container *ngFor="let projectItem of processedProjectGroup.projectItems">
+      <app-project-item [projectItem]="projectItem"></app-project-item>
+    </ng-container>
+  </div>
+
+  <!-- If no projects match, show a message -->
+  <div *ngIf="noProjectsFound" class="alert alert-warning">
+    No projects found.
+  </div>
 
 
-<!-- Paging controls -->
-<div class="paging-controls">
-  <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
-  <span>Page {{ currentPage }} of {{ totalPages }} ({{ totalItems }} items)</span>
-  <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  <!-- Paging controls -->
+  <div class="paging-controls">
+    <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }} ({{ totalItems }} items)</span>
+    <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  </div>
 </div>
