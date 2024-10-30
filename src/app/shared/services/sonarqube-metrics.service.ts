@@ -10,7 +10,6 @@ import { SonarQubeProjectMetricData } from './sonarqube-project.data';
 
 // Configurable Base URL and Token
 const BASE_URL = environment.sonarBaseUrl; // e.g., 'http://localhost:9000/api/project_badges/measure'
-const TOKEN = environment.sonarToken; // e.g., 'sqb_c5a8cb98077a29d831751686ae50bcae3543cb92'
 
 // Metric Names
 const METRICS = [
@@ -49,16 +48,10 @@ export class SonarQubeMetricsService {
 
   // Function to parse SVG and extract metric value
   private parseMetricFromSvg(svg: string, metric: string): SonarQubeProjectMetricData {
-    // if (metric === 'coverage') {
-    //   let value = `${_.round(_.random(0, 100, true), 1)}%`;
-    //   return { name: metric, value };
-    // }
-    // else {
-      const parser = new DOMParser();
-      const svgDoc = parser.parseFromString(svg, 'image/svg+xml');
-      const texts = svgDoc.getElementsByTagName('text');
-      const value = texts[texts.length - 1]?.textContent?.trim() || 'N/A';
-      return { name: metric, value };
-    //}
+    const parser = new DOMParser();
+    const svgDoc = parser.parseFromString(svg, 'image/svg+xml');
+    const texts = svgDoc.getElementsByTagName('text');
+    const value = texts[texts.length - 1]?.textContent?.trim() || 'N/A';
+    return { name: metric, value };
   }
 }

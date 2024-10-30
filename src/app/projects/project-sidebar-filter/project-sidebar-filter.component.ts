@@ -38,9 +38,10 @@ export class ProjectSidebarFilterComponent {
 
   ngOnInit() {
     this.projectDataService.projectList$.subscribe(data => {
-      this.projectList = data;
-      this.calculateCounts();
-      // console.log(this.projectList);
+      if (data !== null) {
+        this.projectList = data;
+        this.calculateCounts();
+      }
     });
   }
 

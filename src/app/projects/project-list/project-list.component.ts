@@ -22,7 +22,7 @@ export class ProjectListComponent implements OnInit {
   noProjectsFound: boolean = false;
 
   currentPage: number = 1;
-  itemsPerPage: number = 2;
+  itemsPerPage: number = 8;
   totalItems: number = 0;
 
   isLoading: boolean = true; // Initialize as true
@@ -34,15 +34,14 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Simulate a 2-second delay
-  setTimeout(() => {
     this.projectDataService.projectList$.subscribe(data => {
-      this.projectList = data;
-      this.flattenedProjectItems = this.flattenProjectItems(data);
-      this.totalItems = this.flattenedProjectItems.length;
-      this.isLoading = false; // Data has loaded
+      if (!_.isNil(data)) {
+        this.projectList = data;
+        this.flattenedProjectItems = this.flattenProjectItems(data);
+        this.totalItems = this.flattenedProjectItems.length;
+        this.isLoading = false; // Data has loaded
+      }
     });
-  }, 2000);
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -7,8 +7,8 @@ import { SonarQubeProjectGroupData } from './sonarqube-project.data';
 })
 export class SonarQubeProjectDataService {
 
-  private projectDataSubject = new BehaviorSubject<SonarQubeProjectGroupData[]>([]);
-  projectData$: Observable<SonarQubeProjectGroupData[]> = this.projectDataSubject.asObservable();
+  private projectDataSubject = new BehaviorSubject<SonarQubeProjectGroupData[] | null>(null);
+  projectData$: Observable<SonarQubeProjectGroupData[] | null> = this.projectDataSubject.asObservable();
 
   updateData(data: SonarQubeProjectGroupData[]) {
     this.projectDataSubject.next(data);
