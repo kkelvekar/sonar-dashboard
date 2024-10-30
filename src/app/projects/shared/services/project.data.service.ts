@@ -11,7 +11,7 @@ import { ProjectGroupService } from "./project.group.service";
   providedIn: 'root'
 })
 export class ProjectDataService {
-  private _projectList = new BehaviorSubject<ProjectList[]>([]);
+  private _projectList = new BehaviorSubject<ProjectList[] | null>(null);
   projectList$ = this._projectList.asObservable();
 
   resetFilters$: Subject<void> = new Subject<void>();
@@ -21,8 +21,10 @@ export class ProjectDataService {
     private projectMetricService: ProjectMetricService,
     private projectGroupService: ProjectGroupService
   ) {
-    this.sonarQubeProjectDataService.projectData$.subscribe((projectGroups: SonarQubeProjectGroupData[]) => {
-      this.mapSonarQubeDataToProjectData(projectGroups);
+    this.sonarQubeProjectDataService.projectData$.subscribe((projectGroups: SonarQubeProjectGroupData[] | null) => {
+      if (!_.isNil(projectGroups)) {
+        this.mapSonarQubeDataToProjectData(projectGroups);
+      }
     });
   }
 

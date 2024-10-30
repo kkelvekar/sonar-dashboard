@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { SortOption, SortOptions } from './toolbar-filter-data';
 import { SonarQubeProjectGroupData } from '../../shared/services/sonarqube-project.data';
 import { SonarQubeProjectDataService } from '../../shared/services/sonarqube-project-data.service';
-import { FilterCriteria } from '../shared/interfaces/filter-criteria';
 import { ProjectDataService } from '../shared/services/project.data.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'project-toolbar-filter',
@@ -21,13 +21,15 @@ export class ProjectToolbarFilterComponent implements OnInit {
   @Output() groupChange = new EventEmitter<string>();
   @Output() sortChange = new EventEmitter<string>();
 
-  constructor(private sonarQubeProjectDataService: SonarQubeProjectDataService, private projectDataService: ProjectDataService){
+  constructor(private sonarQubeProjectDataService: SonarQubeProjectDataService, private projectDataService: ProjectDataService) {
   }
 
   ngOnInit(): void {
     this.sortOptions = SortOptions;
-    this.sonarQubeProjectDataService.projectData$.subscribe((projectGroups: SonarQubeProjectGroupData[]) => {
-      this.projectGroups = projectGroups.map(group => group.name);
+    this.sonarQubeProjectDataService.projectData$.subscribe((projectGroups: SonarQubeProjectGroupData[] | null) => {
+      if (!_.isNil(projectGroups)) {
+        this.projectGroups = projectGroups.map(group => group.name);
+      }
     });
     if (this.projectDataService.resetFilters$) {
       this.projectDataService.resetFilters$.subscribe(() => {

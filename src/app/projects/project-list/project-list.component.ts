@@ -22,8 +22,10 @@ export class ProjectListComponent implements OnInit {
   noProjectsFound: boolean = false;
 
   currentPage: number = 1;
-  itemsPerPage: number = 2;
+  itemsPerPage: number = 8;
   totalItems: number = 0;
+
+  isLoading: boolean = true; // Initialize as true
 
   constructor(
     private projectDataService: ProjectDataService,
@@ -33,9 +35,12 @@ export class ProjectListComponent implements OnInit {
 
   ngOnInit() {
     this.projectDataService.projectList$.subscribe(data => {
-      this.projectList = data;
-      this.flattenedProjectItems = this.flattenProjectItems(data);
-      this.totalItems = this.flattenedProjectItems.length;
+      if (!_.isNil(data)) {
+        this.projectList = data;
+        this.flattenedProjectItems = this.flattenProjectItems(data);
+        this.totalItems = this.flattenedProjectItems.length;
+        this.isLoading = false; // Data has loaded
+      }
     });
   }
 
