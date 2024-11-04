@@ -1,0 +1,17 @@
+# service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "sonarqube-dashboard.fullname" . }}
+  labels:
+    {{- include "sonarqube-dashboard.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "sonarqube-dashboard.selectorLabels" . | nindent 4 }}
