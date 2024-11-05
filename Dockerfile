@@ -1,5 +1,5 @@
 # Stage 1: Build the Angular application
-FROM node:18 AS build
+FROM node:18.12.0 AS build
 
 WORKDIR /app
 
@@ -19,7 +19,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy the build output to Nginx's html directory
-COPY --from=build /app/dist/sonarqube-dashboard/browser /usr/share/nginx/html
+COPY --from=build /app/dist/sonarqube-dashboard /usr/share/nginx/html
 
 # Create a non-root user and group with specific UID and GID
 RUN addgroup -S -g 1000 appgroup && adduser -S -u 1000 -G appgroup appuser

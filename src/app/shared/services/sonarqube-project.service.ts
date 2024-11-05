@@ -11,7 +11,7 @@ import { SonarQubeProjectDataService } from './sonarqube-project-data.service';
 })
 export class SonarQubeProjectService {
 
-  private jsonUrl = 'projects.json';
+  private jsonUrl = 'assets/projects.json';
 
   constructor(
     private sonarqubeMetricService: SonarQubeMetricsService,

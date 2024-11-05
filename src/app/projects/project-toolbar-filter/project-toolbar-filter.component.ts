@@ -8,7 +8,7 @@ import _ from 'lodash';
 @Component({
   selector: 'project-toolbar-filter',
   templateUrl: './project-toolbar-filter.component.html',
-  styleUrl: './project-toolbar-filter.component.css'
+  styleUrls: ['./project-toolbar-filter.component.css']
 })
 export class ProjectToolbarFilterComponent implements OnInit {
   searchTerm: string = '';

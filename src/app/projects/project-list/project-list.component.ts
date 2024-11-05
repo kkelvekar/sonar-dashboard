@@ -1,5 +1,5 @@
 // project-list.component.ts
-import { Component, EventEmitter, Input, OnInit, Output, output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FilterCriteria } from '../shared/interfaces/filter-criteria';
 import { FilteringService } from '../shared/services/filtering.service';
 import { ProjectSortingService } from '../shared/services/project.sorting.service';
