@@ -3,7 +3,7 @@ import { SonarQubeMetricsService } from './sonarqube-metrics.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, mergeMap, groupBy, toArray } from 'rxjs';
 import { map, tap, shareReplay } from 'rxjs/operators';
-import { SonarQubeProjectData } from './sonarqube-project.data';
+import { SonarQubeProjectData, SonarQubeProjectGroupData } from './sonarqube-project.data';
 import { SonarQubeProjectDataService } from './sonarqube-project-data.service';
 
 @Injectable({
@@ -20,6 +20,12 @@ export class SonarQubeProjectService {
   ) { }
 
   getProjectsByGroup(): Observable<any> {
+    let data = this.http.get<SonarQubeProjectGroupData[]>('https://localhost:7293/api/sonarqube-project/projects-by-group');
+    data.subscribe(result => this.sonarQubeProjectDataService.updateData(result));
+    return data;
+  }
+
+  _getProjectsByGroup(): Observable<any> {
     return this.getProjectData().pipe(
       mergeMap(projects => of(...projects)),
       mergeMap(project => this.sonarqubeMetricService.getProjectMetrics(project.projectKey, project.projectToken).pipe(
