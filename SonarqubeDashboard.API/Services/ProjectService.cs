@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace SonarqubeDashboard.API.Services
 {
@@ -39,18 +40,25 @@ namespace SonarqubeDashboard.API.Services
 
         private async Task<List<SonarqubeProject>> GetProjectData()
         {
-            var jsonString = await File.ReadAllTextAsync(_jsonFilePath);
-            var data = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(jsonString);
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "SonarqubeDashboard.API.Data.projects.json";
 
-            var projects = data.Select(item => new SonarqubeProject
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
             {
-                ProjectKey = item["project_key"],
-                ProjectName = item["project_name"],
-                ProjectGroup = item["project_group"],
-                ProjectToken = item["project_token"]
-            }).ToList();
+                var jsonString = await reader.ReadToEndAsync();
+                var data = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(jsonString);
 
-            return projects;
+                var projects = data.Select(item => new SonarqubeProject
+                {
+                    ProjectKey = item["project_key"],
+                    ProjectName = item["project_name"],
+                    ProjectGroup = item["project_group"],
+                    ProjectToken = item["project_token"]
+                }).ToList();
+
+                return projects;
+            }
         }
     }
 }
