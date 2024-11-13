@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { ProjectList } from "../../project-list/project-list";
 import { SonarQubeProjectData, SonarQubeProjectGroupData } from "../../../shared/services/sonarqube-project.data";
-import { SonarQubeProjectDataService } from "../../../shared/services/sonarqube-project-data.service";
 import _ from "lodash";
 import { BehaviorSubject, Subject } from "rxjs";
 import { ProjectMetricService } from "./project.metric.service";
 import { ProjectGroupService } from "./project.group.service";
+import { SonarQubeProjectService } from "../../../shared/services/sonarqube-project.service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +17,11 @@ export class ProjectDataService {
   resetFilters$: Subject<void> = new Subject<void>();
 
   constructor(
-    private sonarQubeProjectDataService: SonarQubeProjectDataService,
     private projectMetricService: ProjectMetricService,
-    private projectGroupService: ProjectGroupService
+    private projectGroupService: ProjectGroupService,
+    private sonarQubeProjectService: SonarQubeProjectService
   ) {
-    this.sonarQubeProjectDataService.projectData$.subscribe((projectGroups: SonarQubeProjectGroupData[] | null) => {
+    this.sonarQubeProjectService.getProjectsByGroup().subscribe((projectGroups: SonarQubeProjectGroupData[] | null) => {
       if (!_.isNil(projectGroups)) {
         this.mapSonarQubeDataToProjectData(projectGroups);
       }
