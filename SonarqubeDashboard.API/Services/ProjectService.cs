@@ -9,24 +9,21 @@ using System.Reflection;
 
 namespace SonarqubeDashboard.API.Services
 {
-    public class ProjectService(MetricsService sonarQubeMetricsService, IConfiguration configuration)
+    public class ProjectService
     {
-        private readonly MetricsService _metricsService = sonarQubeMetricsService;
-        private readonly string _jsonFilePath = configuration["ProjectsJsonFilePath"];
+        private readonly MetricsService _metricsService;
+        private readonly ProjectDataService _projectDataService;
+
+        public ProjectService(MetricsService sonarQubeMetricsService, ProjectDataService projectDataService)
+        {
+            _metricsService = sonarQubeMetricsService;
+            _projectDataService = projectDataService;
+        }
 
         public async Task<List<ProjectGroup>> GetProjectsByGroup()
         {
-            var projects = await GetProjectData();
-
-            var tasks = projects.Select(async project =>
-            {
-                project.Metrics = await _metricsService.GetProjectMetrics(project.ProjectKey, project.ProjectToken);
-                return project;
-            });
-
-            var projectsWithMetrics = await Task.WhenAll(tasks);
-
-            var groupedProjects = projectsWithMetrics
+            var projects = await _projectDataService.Projects;
+            var groupedProjects = projects
                 .GroupBy(p => p.ProjectGroup)
                 .Select(group => new ProjectGroup
                 {
@@ -38,27 +35,5 @@ namespace SonarqubeDashboard.API.Services
             return groupedProjects;
         }
 
-        private async Task<List<SonarqubeProject>> GetProjectData()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "SonarqubeDashboard.API.Data.projects.json";
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                var jsonString = await reader.ReadToEndAsync();
-                var data = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(jsonString);
-
-                var projects = data.Select(item => new SonarqubeProject
-                {
-                    ProjectKey = item["project_key"],
-                    ProjectName = item["project_name"],
-                    ProjectGroup = item["project_group"],
-                    ProjectToken = item["project_token"]
-                }).ToList();
-
-                return projects;
-            }
-        }
     }
 }

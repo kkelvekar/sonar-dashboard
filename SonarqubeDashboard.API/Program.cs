@@ -22,6 +22,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddHttpClient<MetricsService>();
 builder.Services.AddTransient<ProjectService>();
+builder.Services.AddTransient<ProjectDetailService>();
+builder.Services.AddSingleton<ProjectDataService>();
 
 var app = builder.Build();
 
