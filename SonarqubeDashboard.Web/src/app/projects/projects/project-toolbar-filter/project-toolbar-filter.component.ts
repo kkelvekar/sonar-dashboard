@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { SortOption, SortOptions } from './toolbar-filter-data';
-import { ProjectDataService } from '../shared/services/project.data.service';
+import { ProjectDataService } from '../../shared/services/project.data.service';
 import _ from 'lodash';
-import { ProjectList } from '../project-list/project-list';
+import { ProjectList } from '../../project-list/project-list';
 
 @Component({
   selector: 'project-toolbar-filter',

@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { FilterCriteria } from '../shared/interfaces/filter-criteria';
-import { ProjectList } from '../project-list/project-list';
-import { ProjectDataService } from '../shared/services/project.data.service';
+import { FilterCriteria } from '../../shared/interfaces/filter-criteria';
+import { ProjectList } from '../../project-list/project-list';
+import { ProjectDataService } from '../../shared/services/project.data.service';
 
 @Component({
   selector: 'project-sidebar-filter',
