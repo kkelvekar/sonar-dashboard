@@ -1,1 +1,160 @@
-<h1>project-details works!</h1>
+<div class="container">
+
+  <!-- Project Name Row -->
+  <div class="row">
+    <div class="col-12">
+      <h2>Project Name</h2>
+      <hr>
+    </div>
+  </div>
+
+  <!-- Quality Gate Status Row -->
+  <div class="row">
+    <div class="col-md-6">
+      <h5>QUALITY GATE STATUS</h5>
+      <div class="card">
+        <div class="card-header bg-danger text-white d-flex flex-column align-items-start">
+          <h3 class="card-text">Failed</h3>
+          <p class="card-text">3 conditions failed</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">New Code Coverage on New Code is less than 80.0%</li>
+          <li class="list-group-item">New Code Coverage on New Code is less than 80.0%</li>
+          <li class="list-group-item">New Code Coverage on New Code is less than 80.0%</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <i class="metric-icon bi bi-bug"></i>
+          <span class="card-title fw-bolder fs-6 ms-1">Bugs</span>
+          <hr>
+          <div class="d-flex align-items-start mb-3">
+            <span class="metric-rating A me-2">A</span>
+            <span class="metric-description">
+              The Security rating is A when there are no issues above info severity with impact on the security of your
+              software.
+            </span>
+          </div>
+          <div class="d-flex align-items-start mb-3">
+            <strong class="me-2">0.0%</strong>
+            <span class="description-text">
+              Security Hotspots Reviewed on New Code is less than 100%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <i class="metric-icon bi bi-lock"></i>
+          <span class="card-title fw-bolder fs-6 ms-1">Vulnerabilities</span>
+          <hr>
+          <div class="d-flex align-items-start mb-3">
+            <span class="metric-rating B me-2">B</span>
+            <span class="metric-description">
+              The Security rating is A when there are no issues above info severity with impact on the security of your
+              software.
+            </span>
+          </div>
+          <div class="d-flex align-items-start mb-3">
+            <strong class="me-2">0.0%</strong>
+            <span class="description-text">
+              Security Hotspots Reviewed on New Code is less than 100%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <i class="metric-icon bi bi-shield-shaded"></i>
+          <span class="card-title fw-bolder fs-6 ms-1">Hotspots Reviewed</span>
+          <hr>
+          <div class="d-flex align-items-start mb-3">
+            <span class="metric-rating C me-2">C</span>
+            <span class="metric-description">
+              The Security rating is A when there are no issues above info severity with impact on the security of your
+              software.
+            </span>
+          </div>
+          <div class="d-flex align-items-start mb-3">
+            <strong class="me-2">0.0%</strong>
+            <span class="description-text">
+              Security Hotspots Reviewed on New Code is less than 100%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <i class="metric-icon bi bi-radioactive"></i>
+          <span class="card-title fw-bolder fs-6 ms-1">Code Smells</span>
+          <hr>
+          <div class="d-flex align-items-start mb-3">
+            <span class="metric-rating E me-2">E</span>
+            <span class="metric-description">
+              The Security rating is A when there are no issues above info severity with impact on the security of your
+              software.
+            </span>
+          </div>
+          <div class="d-flex align-items-start mb-3">
+            <strong class="me-2">0.0%</strong>
+            <span class="description-text">
+              Security Hotspots Reviewed on New Code is less than 100%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Coverage and Duplications Row -->
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Coverage</h5>
+          <div class="progress">
+            <div class="progress-bar bg-warning text-dark" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+              aria-valuemax="100">50.0%</div>
+          </div>
+          <p class="card-text">Coverage on 230 New Lines to cover</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Duplications</h5>
+          <div class="progress">
+            <div class="progress-bar bg-danger" role="progressbar" style="width: 9.18%" aria-valuenow="9.18" aria-valuemin="0"
+              aria-valuemax="100">9.18%</div>
+          </div>
+          <p class="card-text">Duplications on 610 New Lines</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back Button Row -->
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="p-1">
+        <button type="button" class="btn btn-outline-dark btn-back" routerLink="/projects">BACK</button>
+      </div>
+    </div>
+  </div>
+
+</div>
