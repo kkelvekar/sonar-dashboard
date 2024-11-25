@@ -8,6 +8,7 @@ namespace SonarqubeDashboard.API.Services
     {
         private readonly MetricsService _metricsService;
         private Task<List<SonarqubeProject>> _projectsTask;
+        private Task<List<MetricDefinition>> _metricDefinitionsTask;
 
         public ProjectDataService(MetricsService metricsService)
         {
@@ -15,6 +16,8 @@ namespace SonarqubeDashboard.API.Services
         }
 
         public Task<List<SonarqubeProject>> Projects => _projectsTask ??= LoadProjectsAsync();
+
+        public Task<List<MetricDefinition>> MetricDefinitions => _metricDefinitionsTask ??= GetMetricDefinitionsFromJSON();
 
         private async Task<List<SonarqubeProject>> LoadProjectsAsync()
         {
@@ -60,5 +63,24 @@ namespace SonarqubeDashboard.API.Services
                 return projects;
             }
         }
+
+        private async Task<List<MetricDefinition>> GetMetricDefinitionsFromJSON()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "SonarqubeDashboard.API.Data.metric-definitions.json";
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                var jsonString = await reader.ReadToEndAsync();
+                var metricDefinitions = JsonSerializer.Deserialize<List<MetricDefinition>>(jsonString, options);
+                return metricDefinitions;
+            }
+        }
     }
+
 }

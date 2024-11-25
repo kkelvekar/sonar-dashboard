@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Data\metric-definitions.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <EmbeddedResource Include="Data\metric-definitions.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
 	<EmbeddedResource Include="Data\projects.json">
 	  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	</EmbeddedResource>

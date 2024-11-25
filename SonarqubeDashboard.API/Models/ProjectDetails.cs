@@ -1,4 +1,6 @@
-﻿namespace SonarqubeDashboard.API.Models
+﻿using System.Collections;
+
+namespace SonarqubeDashboard.API.Models
 {
     public class ProjectDetails
     {
@@ -19,7 +21,7 @@
     public class  ProjectQualityGate
     {
         public string QualityGateStatus { get; set; }
-        public string[] QualityGateConditions { get; set; }
+        public IEnumerable<string> QualityGateConditions { get; set; }
 
     }
 

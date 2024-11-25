@@ -1,0 +1,114 @@
+[
+  {
+    "code": "sqale_rating",
+    "name": "Maintainability Rating",
+    "description": "Assesses the maintainability of the project based on the Technical Debt Ratio, indicating the effort required to fix code issues.",
+    "type": "rating",
+    "ranks": [
+      {
+        "rank": "A",
+        "description": "Excellent: Very low technical debt (≤5% of the project's development time)"
+      },
+      {
+        "rank": "B",
+        "description": "Good: Low technical debt (6-10% of the project's development time)"
+      },
+      {
+        "rank": "C",
+        "description": "Fair: Moderate technical debt (11-20% of the project's development time)"
+      },
+      {
+        "rank": "D",
+        "description": "Poor: High technical debt (21-50% of the project's development time)"
+      },
+      {
+        "rank": "E",
+        "description": "Very Poor: Very high technical debt (>50% of the project's development time)"
+      }
+    ]
+  },
+  {
+    "code": "reliability_rating",
+    "name": "Reliability Rating",
+    "description": "Evaluates the reliability of the project by assessing the severity and quantity of bug issues present.",
+    "type": "rating",
+    "ranks": [
+      {
+        "rank": "A",
+        "description": "0 Bugs: No bug issues detected. Excellent reliability."
+      },
+      {
+        "rank": "B",
+        "description": "Minor Bugs: At least 1 minor bug present. Good reliability."
+      },
+      {
+        "rank": "C",
+        "description": "Major Bugs: At least 1 major bug present. Fair reliability."
+      },
+      {
+        "rank": "D",
+        "description": "Critical Bugs: At least 1 critical bug present. Poor reliability."
+      },
+      {
+        "rank": "E",
+        "description": "Blocker Bugs: At least 1 blocker bug present. Very Poor reliability."
+      }
+    ]
+  },
+  {
+    "code": "security_rating",
+    "name": "Vulnerabilities Rating",
+    "description": "Measures the project's security posture by evaluating the number and severity of security vulnerabilities detected.",
+    "type": "rating",
+    "ranks": [
+      {
+        "rank": "A",
+        "description": "0 Vulnerabilities: No security vulnerabilities detected. Excellent security posture."
+      },
+      {
+        "rank": "B",
+        "description": "Minor Vulnerabilities: At least 1 minor vulnerability present. Good security posture."
+      },
+      {
+        "rank": "C",
+        "description": "Major Vulnerabilities: At least 1 major vulnerability present. Fair security posture."
+      },
+      {
+        "rank": "D",
+        "description": "Critical Vulnerabilities: At least 1 critical vulnerability present. Poor security posture."
+      },
+      {
+        "rank": "E",
+        "description": "Blocker Vulnerabilities: At least 1 blocker vulnerability present. Very Poor security posture."
+      }
+    ]
+  },
+  {
+    "code": "security_review_rating",
+    "name": "Security Hotspots Rating",
+    "description": "Evaluates the thoroughness of the security review process by measuring the percentage of Security Hotspots that have been reviewed.",
+    "type": "rating",
+    "ranks": [
+      {
+        "rank": "A",
+        "description": "80% and above: ≥80% of Security Hotspots reviewed. Outstanding security review."
+      },
+      {
+        "rank": "B",
+        "description": "70% to <80%: ≥70% and <80% of Security Hotspots reviewed. Good security review."
+      },
+      {
+        "rank": "C",
+        "description": "50% to <70%: ≥50% and <70% of Security Hotspots reviewed. Fair security review."
+      },
+      {
+        "rank": "D",
+        "description": "30% to <50%: ≥30% and <50% of Security Hotspots reviewed. Poor security review."
+      },
+      {
+        "rank": "E",
+        "description": "<30%: Less than 30% of Security Hotspots reviewed. Very Poor security review."
+      }
+    ]
+  }
+]
