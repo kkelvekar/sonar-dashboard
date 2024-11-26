@@ -25,29 +25,19 @@ namespace SonarqubeDashboard.API.Models
 
     }
 
-    public class ProjectBug
+    public abstract class ProjectMetricBase
     {
-        public string BugCount { get; set; }
+        public string Count { get; set; }
         public Rating Rating { get; set; }
     }
 
-    public class ProjectVulnerability
-    {
-        public string VulnerabilityCount { get; set; }
-        public Rating Rating { get; set; }
-    }
+    public class ProjectBug : ProjectMetricBase { }
 
-    public class ProjectSecurityHotspot
-    {
-        public string SecurityHotspotCount { get; set; }
-        public Rating Rating { get; set; }
-    }
+    public class ProjectVulnerability : ProjectMetricBase { }
 
-    public class ProjectCodeSmell
-    {
-        public string CodeSmellCount { get; set; }
-        public Rating Rating { get; set; }
-    }
+    public class ProjectSecurityHotspot : ProjectMetricBase { }
+
+    public class ProjectCodeSmell : ProjectMetricBase { }
 
     public class Rating
     {

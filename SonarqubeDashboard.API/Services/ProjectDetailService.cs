@@ -8,70 +8,81 @@ namespace SonarqubeDashboard.API.Services
     {
         private readonly ProjectDataService _projectDataService;
         private readonly SonarqubeService _sonarqubeService;
+
         public ProjectDetailService(ProjectDataService projectDataService, SonarqubeService sonarqubeService)
         {
             _projectDataService = projectDataService;
             _sonarqubeService = sonarqubeService;
         }
 
-        public async Task<ProjectDetails> GetProjectDetails(string projectKey) 
-        { 
+        public async Task<ProjectDetails> GetProjectDetails(string projectKey)
+        {
             var projects = await _projectDataService.Projects;
-            var metrics = await _projectDataService.MetricDefinitions;
+            var metricDefinitions = await _projectDataService.MetricDefinitions;
             var project = projects.Find(p => p.ProjectKey == projectKey);
+
+            if (project is null)
+            {
+                return null;
+            }
+
+            var metrics = project.Metrics.ToDictionary(m => m.Name, m => m.Value);
+            var metricDefs = metricDefinitions.ToDictionary(md => md.Code);
+
             var result = new ProjectDetails
             {
                 ProjectKey = project.ProjectKey,
                 ProjectName = project.ProjectName,
-                ProjectGroup = project.ProjectGroup,                      
+                ProjectGroup = project.ProjectGroup,
                 QualityGate = await GetQualityGate(projectKey, project),
-                Bugs = new ProjectBug
-                {
-                    BugCount = project.Metrics.Find(m => m.Name == "bugs")?.Value,
-                    Rating = new Rating
-                    {
-                        RatingValue = project.Metrics.Find(m => m.Name == "reliability_rating")?.Value,
-                        RatingDescription = GetRatingDescription("reliability_rating", project.Metrics.Find(m => m.Name == "reliability_rating")?.Value, metrics)
-                    }
-                },
-                Vulnerabilities = new ProjectVulnerability
-                {
-                    VulnerabilityCount = project.Metrics.Find(m => m.Name == "vulnerabilities")?.Value,
-                    Rating = new Rating
-                    {
-                        RatingValue = project.Metrics.Find(m => m.Name == "security_rating")?.Value,
-                        RatingDescription = GetRatingDescription("security_rating", project.Metrics.Find(m => m.Name == "security_rating")?.Value, metrics)
-                    }
-                },
-                SecurityHotspots = new ProjectSecurityHotspot
-                {
-                    SecurityHotspotCount = project.Metrics.Find(m => m.Name == "security_hotspots")?.Value,
-                    Rating = new Rating
-                    {
-                        RatingValue = project.Metrics.Find(m => m.Name == "security_rating")?.Value, // To Do: Needs to calculate
-                        RatingDescription = GetRatingDescription("security_review_rating", project.Metrics.Find(m => m.Name == "security_review_rating")?.Value, metrics)
-                    }
-                },
-                CodeSmells = new ProjectCodeSmell
-                {
-                    CodeSmellCount = project.Metrics.Find(m => m.Name == "code_smells")?.Value,
-                    Rating = new Rating
-                    {
-                        RatingValue = project.Metrics.Find(m => m.Name == "sqale_rating")?.Value,
-                        RatingDescription = GetRatingDescription("sqale_rating", project.Metrics.Find(m => m.Name == "sqale_rating")?.Value, metrics)
-                    }
-                },
-                Coverage = project.Metrics.Find(m => m.Name == "coverage")?.Value,
-                DuplicatedLinesDensity = project.Metrics.Find(m => m.Name == "duplicated_lines_density")?.Value,
-                Ncloc = project.Metrics.Find(m => m.Name == "ncloc")?.Value
+                Bugs = CreateProjectMetric<ProjectBug>("bugs", "reliability_rating", metrics, metricDefs),
+                Vulnerabilities = CreateProjectMetric<ProjectVulnerability>("vulnerabilities", "security_rating", metrics, metricDefs),
+                SecurityHotspots = await CreateSecurityReviewProjectMetric<ProjectSecurityHotspot>("security_hotspots", "security_review_rating", projectKey, metrics, metricDefs),
+                CodeSmells = CreateProjectMetric<ProjectCodeSmell>("code_smells", "sqale_rating", metrics, metricDefs),
+                Coverage = metrics.GetValueOrDefault("coverage"),
+                DuplicatedLinesDensity = metrics.GetValueOrDefault("duplicated_lines_density"),
+                Ncloc = metrics.GetValueOrDefault("ncloc")
             };
+
             return result;
+
+        }
+
+        private T CreateProjectMetric<T>(string countMetricName, string ratingCode, Dictionary<string, string> metrics, Dictionary<string, MetricDefinition> metricDefs) where T : ProjectMetricBase, new()
+        {
+            var countValue = metrics.GetValueOrDefault(countMetricName);
+            var ratingValue = metrics.GetValueOrDefault(ratingCode);
+            return new T
+            {
+                Count = countValue,
+                Rating = new Rating
+                {
+                    RatingValue = ratingValue,
+                    RatingDescription = GetRatingDescription(ratingCode, ratingValue, metricDefs)
+                }
+            };
+        }
+
+        private async Task<T> CreateSecurityReviewProjectMetric<T>(string countMetricName, string ratingCode, string projectKey, Dictionary<string, string> metrics, Dictionary<string, MetricDefinition> metricDefs) where T : ProjectMetricBase, new()
+        {
+            var countValue = metrics.GetValueOrDefault(countMetricName);
+            var ratingValue = await _sonarqubeService.GetSecurityReviewRating(projectKey);
+            return new T
+            {
+                Count = countValue,
+                Rating = new Rating
+                {
+                    RatingValue = ratingValue,
+                    RatingDescription = GetRatingDescription(ratingCode, ratingValue, metricDefs)
+                }
+            };
         }
 
         private async Task<ProjectQualityGate> GetQualityGate(string projectKey, SonarqubeProject project)
         {
             var qualityGateStatus = project.Metrics.Find(m => m.Name == "alert_status")?.Value;
             var qualityGateConditions = await _sonarqubeService.GetQualityGateFailedConditions(projectKey);
+
             return new ProjectQualityGate
             {
                 QualityGateStatus = qualityGateStatus,
@@ -79,17 +90,17 @@ namespace SonarqubeDashboard.API.Services
             };
         }
 
-        private string GetRatingDescription(string ratingCode, string ratingValue, List<MetricDefinition> metrics)
+        private string GetRatingDescription(string ratingCode, string ratingValue, Dictionary<string, MetricDefinition> metricDefinitions)
         {
-            var metric = metrics.FirstOrDefault(m => m.Code == ratingCode);
-            if (metric != null)
+            if (metricDefinitions.TryGetValue(ratingCode, out var metric) && metric.Ranks != null)
             {
-                var rank = metric.Ranks.FirstOrDefault(r => r.Rank == ratingValue);
+                var rank = metric.Ranks.Find(r => r.Rank == ratingValue);
                 if (rank != null)
                 {
                     return rank.Description;
                 }
             }
+
             return string.Empty;
         }
     }
