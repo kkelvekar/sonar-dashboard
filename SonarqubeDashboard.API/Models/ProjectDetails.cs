@@ -8,6 +8,19 @@ namespace SonarqubeDashboard.API.Models
         public string ProjectName { get; set; }
         public string ProjectGroup { get; set; }
         public ProjectQualityGate QualityGate { get; set; }
+        public ProjectMeasures NewCodeMetrics { get; set; }
+        public ProjectMeasures OverallCodeMetrics { get; set; }
+    }
+
+    public class ProjectQualityGate
+    {
+        public string QualityGateStatus { get; set; }
+        public IEnumerable<QualityGateCondition> QualityGateConditions { get; set; }
+
+    }
+
+    public class ProjectMeasures
+    {
         public ProjectBug Bugs { get; set; }
         public ProjectVulnerability Vulnerabilities { get; set; }
         public ProjectSecurityHotspot SecurityHotspots { get; set; }
@@ -15,15 +28,8 @@ namespace SonarqubeDashboard.API.Models
         public string Coverage { get; set; }
         public string DuplicatedLinesDensity { get; set; }
         public string Ncloc { get; set; }
-
     }
 
-    public class  ProjectQualityGate
-    {
-        public string QualityGateStatus { get; set; }
-        public IEnumerable<QualityGateCondition> QualityGateConditions { get; set; }
-
-    }
 
     public abstract class ProjectMetricBase
     {

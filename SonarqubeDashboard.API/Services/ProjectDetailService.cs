@@ -1,6 +1,7 @@
 ﻿using SonarqubeDashboard.API.Models;
 using System.Reflection;
 using System.Text.Json;
+using static SonarqubeDashboard.API.Services.SonarqubeMeasuresService;
 
 namespace SonarqubeDashboard.API.Services
 {
@@ -8,20 +9,20 @@ namespace SonarqubeDashboard.API.Services
     {
         private readonly ProjectDataService _projectDataService;
         private readonly SonarqubeQualityGateSerivce _sonarqubeQualityGateService;
-        private readonly SonarqubeRatingMericsService _sonarqubeRatingMetricsService;
+        private readonly SonarqubeMeasuresService _sonarqubeMeasuresService;
 
-        public ProjectDetailService(ProjectDataService projectDataService, SonarqubeQualityGateSerivce sonarqubeQualityGateSerivce, SonarqubeRatingMericsService sonarqubeRatingMetricsService)
+        public ProjectDetailService(ProjectDataService projectDataService, SonarqubeQualityGateSerivce sonarqubeQualityGateSerivce, SonarqubeMeasuresService sonarqubeMeasuresService)
         {
             _projectDataService = projectDataService;
             _sonarqubeQualityGateService = sonarqubeQualityGateSerivce;
-            _sonarqubeRatingMetricsService = sonarqubeRatingMetricsService;
+            _sonarqubeMeasuresService = sonarqubeMeasuresService;
         }
 
         public async Task<ProjectDetails> GetProjectDetails(string projectKey)
         {
             var projects = await _projectDataService.Projects;
-            var metricDefinitions = await _projectDataService.MetricDefinitions;
             var project = projects.Find(p => p.ProjectKey == projectKey);
+            var metricDefinitions = await _projectDataService.MetricDefinitions;
 
             if (project is null)
             {
@@ -31,53 +32,25 @@ namespace SonarqubeDashboard.API.Services
             var metrics = project.Metrics.ToDictionary(m => m.Name, m => m.Value);
             var metricDefs = metricDefinitions.ToDictionary(md => md.Code);
 
+            var component = await _sonarqubeMeasuresService.GetComponentMeasures(projectKey);
+
+            if (component == null)
+            {
+                return null;
+            }
+
             var result = new ProjectDetails
             {
                 ProjectKey = project.ProjectKey,
                 ProjectName = project.ProjectName,
                 ProjectGroup = project.ProjectGroup,
                 QualityGate = await GetQualityGate(projectKey, project),
-                Bugs = CreateProjectMetric<ProjectBug>("bugs", "reliability_rating", metrics, metricDefs),
-                Vulnerabilities = CreateProjectMetric<ProjectVulnerability>("vulnerabilities", "security_rating", metrics, metricDefs),
-                SecurityHotspots = await CreateSecurityReviewProjectMetric<ProjectSecurityHotspot>("security_hotspots", "security_review_rating", projectKey, metrics, metricDefs),
-                CodeSmells = CreateProjectMetric<ProjectCodeSmell>("code_smells", "sqale_rating", metrics, metricDefs),
-                Coverage = metrics.GetValueOrDefault("coverage"),
-                DuplicatedLinesDensity = metrics.GetValueOrDefault("duplicated_lines_density"),
-                Ncloc = metrics.GetValueOrDefault("ncloc")
+                NewCodeMetrics = MapMeasures(component.Measures, metricDefs, isNewCode: true),
+                OverallCodeMetrics = MapMeasures(component.Measures, metricDefs, isNewCode: false)
             };
 
             return result;
 
-        }
-
-        private T CreateProjectMetric<T>(string countMetricName, string ratingCode, Dictionary<string, string> metrics, Dictionary<string, MetricDefinition> metricDefs) where T : ProjectMetricBase, new()
-        {
-            var countValue = metrics.GetValueOrDefault(countMetricName);
-            var ratingValue = metrics.GetValueOrDefault(ratingCode);
-            return new T
-            {
-                Count = countValue,
-                Rating = new Rating
-                {
-                    RatingValue = ratingValue,
-                    RatingDescription = GetRatingDescription(ratingCode, ratingValue, metricDefs)
-                }
-            };
-        }
-
-        private async Task<T> CreateSecurityReviewProjectMetric<T>(string countMetricName, string ratingCode, string projectKey, Dictionary<string, string> metrics, Dictionary<string, MetricDefinition> metricDefs) where T : ProjectMetricBase, new()
-        {
-            var countValue = metrics.GetValueOrDefault(countMetricName);
-            var ratingValue = await _sonarqubeRatingMetricsService.GetSecurityReviewRating(projectKey);
-            return new T
-            {
-                Count = countValue,
-                Rating = new Rating
-                {
-                    RatingValue = ratingValue,
-                    RatingDescription = GetRatingDescription(ratingCode, ratingValue, metricDefs)
-                }
-            };
         }
 
         private async Task<ProjectQualityGate> GetQualityGate(string projectKey, SonarqubeProject project)
@@ -92,9 +65,106 @@ namespace SonarqubeDashboard.API.Services
             };
         }
 
+        private ProjectMeasures MapMeasures(List<Measure> measures, Dictionary<string, MetricDefinition> metricDefinitions, bool isNewCode)
+        {
+            var projectMeasures = new ProjectMeasures();
+
+            var prefix = isNewCode ? "new_" : "";
+
+            // Mapping Bugs
+            var bugsMetric = measures.FirstOrDefault(m => m.Metric == $"{prefix}bugs");
+            var bugsRatingMetric = measures.FirstOrDefault(m => m.Metric == $"{prefix}reliability_rating");
+            projectMeasures.Bugs = CreateProjectMetric<ProjectBug>(
+                bugsMetric,
+                bugsRatingMetric,
+                metricDefinitions);
+
+            // Mapping Vulnerabilities
+            var vulnerabilitiesMetric = measures.FirstOrDefault(m => m.Metric == $"{prefix}vulnerabilities");
+            var vulnerabilitiesRatingMetric = measures.FirstOrDefault(m => m.Metric == $"{prefix}security_rating");
+            projectMeasures.Vulnerabilities = CreateProjectMetric<ProjectVulnerability>(
+                vulnerabilitiesMetric,
+                vulnerabilitiesRatingMetric,
+                metricDefinitions);
+
+            // Mapping Security Hotspots
+            var securityHotspotsMetric = measures.FirstOrDefault(m => m.Metric == $"{prefix}security_hotspots");
+            var securityHotspotsRatingMetric = measures.FirstOrDefault(m => m.Metric == $"{prefix}security_review_rating");
+            projectMeasures.SecurityHotspots = CreateProjectMetric<ProjectSecurityHotspot>(
+                securityHotspotsMetric,
+                securityHotspotsRatingMetric,
+                metricDefinitions);
+
+            // Mapping Code Smells
+            var codeSmellsMetric = measures.FirstOrDefault(m => m.Metric == $"{prefix}code_smells");
+            var codeSmellsRatingMetric = isNewCode ? measures.FirstOrDefault(m => m.Metric == $"{prefix}maintainability_rating") : measures.FirstOrDefault(m => m.Metric == "sqale_rating");
+            projectMeasures.CodeSmells = CreateProjectMetric<ProjectCodeSmell>(
+                codeSmellsMetric,
+                codeSmellsRatingMetric,
+                metricDefinitions);
+
+            // Mapping Coverage, Duplicated Lines Density, and Ncloc (only for overall code metrics)
+            if (!isNewCode)
+            {
+                projectMeasures.Coverage = GetValue(measures, "coverage");
+                projectMeasures.DuplicatedLinesDensity = GetValue(measures, "duplicated_lines_density");
+                projectMeasures.Ncloc = GetValue(measures, "ncloc");
+            }
+            else
+            {
+                projectMeasures.Coverage = GetValue(measures, $"{prefix}coverage");
+                projectMeasures.DuplicatedLinesDensity = GetValue(measures, $"{prefix}duplicated_lines_density");
+                projectMeasures.Ncloc = GetValue(measures, $"new_lines");
+            }
+
+            return projectMeasures;
+        }
+
+        private T CreateProjectMetric<T>(Measure countMeasure, Measure ratingMeasure, Dictionary<string, MetricDefinition> metricDefinitions) where T : ProjectMetricBase, new()
+        {
+            var ratingCode = ratingMeasure?.Metric;
+
+            if (ratingCode == "new_maintainability_rating")
+            {
+                ratingCode = "sqale_rating";
+            }
+
+            var ratingValue = GetValueFromMeasure(ratingMeasure);
+
+            return new T
+            {
+                Count = GetValueFromMeasure(countMeasure),
+                Rating = new Rating
+                {
+                    RatingValue = ratingValue,
+                    RatingDescription = GetRatingDescription(ratingCode, ratingValue, metricDefinitions)
+                }
+            };
+        }
+
+        private string GetValue(List<Measure> measures, string metricName)
+        {
+            var measure = measures.FirstOrDefault(m => m.Metric.Equals(metricName, StringComparison.OrdinalIgnoreCase));
+            return GetValueFromMeasure(measure);
+        }
+
+        private string GetValueFromMeasure(Measure measure)
+        {
+            return measure?.Value ?? measure?.Period?.Value;
+        }
+
+
         private string GetRatingDescription(string ratingCode, string ratingValue, Dictionary<string, MetricDefinition> metricDefinitions)
         {
-            if (metricDefinitions.TryGetValue(ratingCode, out var metric) && metric.Ranks != null)
+            if (string.IsNullOrEmpty(ratingCode) || string.IsNullOrEmpty(ratingValue))
+            {
+                return string.Empty;
+            }
+
+            // Remove 'new_' prefix if present
+            string baseRatingCode = ratingCode.StartsWith("new_") ? ratingCode.Substring(4) : ratingCode;
+
+            if (metricDefinitions.TryGetValue(baseRatingCode, out var metric) && metric.Ranks != null)
             {
                 var rank = metric.Ranks.Find(r => r.Rank == ratingValue);
                 if (rank != null)

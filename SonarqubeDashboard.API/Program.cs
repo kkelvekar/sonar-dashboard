@@ -39,7 +39,7 @@ builder.Services.AddHttpClient<MetricsService>(client =>
     client.BaseAddress = new Uri($"{sonarBaseUrl}/project_badges/measure");
 });
 
-builder.Services.AddHttpClient<SonarqubeRatingMericsService>(client =>
+builder.Services.AddHttpClient<SonarqubeMeasuresService>(client =>
 {
     client.BaseAddress = new Uri(sonarBaseUrl);
     var username = configuration["SonarUsername"];
