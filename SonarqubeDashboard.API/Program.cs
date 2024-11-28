@@ -39,7 +39,20 @@ builder.Services.AddHttpClient<MetricsService>(client =>
     client.BaseAddress = new Uri($"{sonarBaseUrl}/project_badges/measure");
 });
 
-builder.Services.AddHttpClient<SonarqubeService>(client =>
+builder.Services.AddHttpClient<SonarqubeRatingMericsService>(client =>
+{
+    client.BaseAddress = new Uri(sonarBaseUrl);
+    var username = configuration["SonarUsername"];
+    var password = string.Empty;
+
+    var credentials = $"{username}:{password}";
+    var bytes = Encoding.UTF8.GetBytes(credentials);
+    var base64Credentials = Convert.ToBase64String(bytes);
+
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64Credentials);
+});
+
+builder.Services.AddHttpClient<SonarqubeQualityGateSerivce>(client =>
 {
     client.BaseAddress = new Uri(sonarBaseUrl);
     var username = configuration["SonarUsername"];

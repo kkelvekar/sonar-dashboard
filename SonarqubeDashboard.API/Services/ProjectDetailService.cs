@@ -7,12 +7,14 @@ namespace SonarqubeDashboard.API.Services
     public class ProjectDetailService
     {
         private readonly ProjectDataService _projectDataService;
-        private readonly SonarqubeService _sonarqubeService;
+        private readonly SonarqubeQualityGateSerivce _sonarqubeQualityGateService;
+        private readonly SonarqubeRatingMericsService _sonarqubeRatingMetricsService;
 
-        public ProjectDetailService(ProjectDataService projectDataService, SonarqubeService sonarqubeService)
+        public ProjectDetailService(ProjectDataService projectDataService, SonarqubeQualityGateSerivce sonarqubeQualityGateSerivce, SonarqubeRatingMericsService sonarqubeRatingMetricsService)
         {
             _projectDataService = projectDataService;
-            _sonarqubeService = sonarqubeService;
+            _sonarqubeQualityGateService = sonarqubeQualityGateSerivce;
+            _sonarqubeRatingMetricsService = sonarqubeRatingMetricsService;
         }
 
         public async Task<ProjectDetails> GetProjectDetails(string projectKey)
@@ -66,7 +68,7 @@ namespace SonarqubeDashboard.API.Services
         private async Task<T> CreateSecurityReviewProjectMetric<T>(string countMetricName, string ratingCode, string projectKey, Dictionary<string, string> metrics, Dictionary<string, MetricDefinition> metricDefs) where T : ProjectMetricBase, new()
         {
             var countValue = metrics.GetValueOrDefault(countMetricName);
-            var ratingValue = await _sonarqubeService.GetSecurityReviewRating(projectKey);
+            var ratingValue = await _sonarqubeRatingMetricsService.GetSecurityReviewRating(projectKey);
             return new T
             {
                 Count = countValue,
@@ -81,7 +83,7 @@ namespace SonarqubeDashboard.API.Services
         private async Task<ProjectQualityGate> GetQualityGate(string projectKey, SonarqubeProject project)
         {
             var qualityGateStatus = project.Metrics.Find(m => m.Name == "alert_status")?.Value;
-            var qualityGateConditions = await _sonarqubeService.GetQualityGateFailedConditions(projectKey);
+            var qualityGateConditions = await _sonarqubeQualityGateService.GetQualityGateFailedConditions(projectKey);
 
             return new ProjectQualityGate
             {

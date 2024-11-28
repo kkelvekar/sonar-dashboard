@@ -21,7 +21,7 @@ namespace SonarqubeDashboard.API.Models
     public class  ProjectQualityGate
     {
         public string QualityGateStatus { get; set; }
-        public IEnumerable<string> QualityGateConditions { get; set; }
+        public IEnumerable<QualityGateCondition> QualityGateConditions { get; set; }
 
     }
 
@@ -44,5 +44,12 @@ namespace SonarqubeDashboard.API.Models
         public string RatingValue { get; set; }
         public string RatingDescription { get; set; }
 
+    }
+
+    public class QualityGateCondition
+    {
+        public string ActualValue { get; set; }
+
+        public string Message { get; set; }
     }
 }
