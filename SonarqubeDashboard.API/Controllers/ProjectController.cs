@@ -24,7 +24,7 @@ namespace SonarqubeDashboard.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("projects-details/{projectKey}")]
+        [HttpGet("project-details/{projectKey}")]
         public async Task<IActionResult> GetProjectDetails(string projectKey)
         {
             var result = await _projectDetailService.GetProjectDetails(projectKey);

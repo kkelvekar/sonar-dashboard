@@ -134,7 +134,7 @@ namespace SonarqubeDashboard.API.Services
                                 {
                                     return eventElement.description
                                         .Split(',')
-                                        .Select(s => s.Trim())
+                                        .Select(s => ReplaceOperators(s.Trim()))
                                         .ToList();
                                 }
                             }
@@ -148,6 +148,18 @@ namespace SonarqubeDashboard.API.Services
             }
 
             return Enumerable.Empty<string>();
+        }
+
+        private string ReplaceOperators(string condition)
+        {
+            if (string.IsNullOrEmpty(condition))
+                return condition;
+
+            return condition
+                .Replace(">=", "is greater than or equal to")
+                .Replace("<=", "is less than or equal to")
+                .Replace(">", "is greater than")
+                .Replace("<", "is less than");
         }
 
     }
