@@ -1,4 +1,5 @@
 export interface ProjectItem {
+  key: string; // Project key
   name: string; // Project name
   qualityGate: string; // Quality gate metric
   bugs: number; // Bugs metric

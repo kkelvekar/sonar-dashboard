@@ -88,6 +88,7 @@ export class ProjectDataService {
 
   private mapProjectItems(projects: SonarQubeProjectData[]) {
     return projects.map(project => ({
+      key: project.projectKey,
       name: project.projectName,
       qualityGate: this.projectMetricService.getMetricValue(project.metrics, 'alert_status') as string,
       //qualityGate: _.sample(['passed', 'failed']) as string,

@@ -5,7 +5,7 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
 
 const routes: Routes = [
   { path: 'projects', component: ProjectsComponent },
-  { path: 'projects/:id', component: ProjectDetailsComponent },
+  { path: 'projects/:key', component: ProjectDetailsComponent },
   { path: '', redirectTo: 'projects', pathMatch: 'full' }
 ];
 

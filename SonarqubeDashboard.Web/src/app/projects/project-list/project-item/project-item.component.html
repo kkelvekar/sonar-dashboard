@@ -1,7 +1,7 @@
 <div class="card-custom position-relative cursor-pointer">
   <div class="card-header">
     <h5>
-      <a [routerLink]="[projectItem.name]" class="stretched-link text-decoration-none text-reset">{{ projectItem.name }}</a>
+      <a [routerLink]="[projectItem.key]" class="stretched-link text-decoration-none text-reset">{{ projectItem.name }}</a>
       <span
         class="badge ms-2"
         [ngClass]="isAlertStatusPassed() ? 'passed-badge' : 'failed-badge'"
