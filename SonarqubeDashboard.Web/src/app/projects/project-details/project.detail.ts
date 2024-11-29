@@ -3,6 +3,16 @@ export interface ProjectDetails {
   projectName: string;
   projectGroup: string;
   qualityGate: ProjectQualityGate;
+  newCodeMetrics: ProjectMeasures;
+  overallCodeMetrics: ProjectMeasures;
+}
+
+export interface ProjectQualityGate {
+  qualityGateStatus: string;
+  qualityGateConditions: QualityGateCondition[];
+}
+
+export interface ProjectMeasures {
   bugs: ProjectBug;
   vulnerabilities: ProjectVulnerability;
   securityHotspots: ProjectSecurityHotspot;
@@ -10,11 +20,6 @@ export interface ProjectDetails {
   coverage: string;
   duplicatedLinesDensity: string;
   ncloc: string;
-}
-
-export interface ProjectQualityGate {
-  qualityGateStatus: string;
-  qualityGateConditions: QualityGateCondition[];
 }
 
 export interface ProjectMetricBase {
@@ -35,7 +40,7 @@ export interface Rating {
   ratingDescription: string;
 }
 
-export interface QualityGateCondition{
-    actualValue: string;
-    message: string;
+export interface QualityGateCondition {
+  actualValue: string;
+  message: string;
 }

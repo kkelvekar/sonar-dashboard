@@ -1,0 +1,28 @@
+<h5 class="section-title">
+  QUALITY GATE STATUS
+  <span class="info-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+    title="A Quality Gate is a set of measure-based Boolean conditions. It helps you know immediately whether your project is production-ready. If your current status is not Passed, you'll see which measures caused the problem and the values required to pass.">
+    <i class="bi bi-info-circle"></i>
+  </span>
+</h5>
+<div class="card metric-card">
+  <div class="card-header text-white d-flex flex-column align-items-start"
+    [ngClass]="qualityGate?.qualityGateStatus === 'failed' ? 'bg-danger' : 'bg-success'">
+    <h4 class="card-text">{{ qualityGate?.qualityGateStatus | uppercase }}</h4>
+    <p class="card-text" *ngIf="qualityGate?.qualityGateStatus === 'failed'">
+      {{ qualityGate?.qualityGateConditions?.length }} conditions failed
+    </p>
+  </div>
+  <ul class="list-group list-group-flush" *ngIf="qualityGate?.qualityGateStatus === 'failed'">
+    <li class="list-group-item d-flex align-items-start"
+      *ngFor="let condition of qualityGate?.qualityGateConditions">
+      <div class="d-flex flex-column text-center">
+        <strong class="mb-1 fs-6">{{ condition.actualValue }}</strong>
+      </div>
+      <div class="ms-1">
+        <span>{{ condition.message }}</span>
+      </div>
+    </li>
+  </ul>
+</div>
+

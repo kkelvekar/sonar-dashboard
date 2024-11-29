@@ -13,7 +13,7 @@ export class ProjectDetailService {
   constructor(private http: HttpClient) { }
 
   getProjectDetails(projectKey: string) : Observable<ProjectDetails | null> {
-    const url = `${environment.projectApiUrl}/api/sonarqube-project/project-details/${projectKey}`;
+    const url = `${environment.projectApiUrl}/api/projects/${projectKey}`;
     const data = this.http.get<ProjectDetails>(url).pipe(
       catchError(error => {
         console.error('Error fetching project details:', error);

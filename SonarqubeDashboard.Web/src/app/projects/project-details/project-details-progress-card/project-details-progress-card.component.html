@@ -1,0 +1,12 @@
+<div class="card metric-card shadow-sm rounded">
+  <div class="card-body">
+    <h5 class="card-title">{{ title }}</h5>
+    <!-- Progress Bar -->
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" [style.width.%]="value"
+        [attr.aria-valuenow]="value" aria-valuemin="0" aria-valuemax="100"
+        [ngClass]="progressBarClass"></div>
+      <span class="progress-text">{{ displayValue }}</span>
+    </div>
+  </div>
+</div>

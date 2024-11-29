@@ -1,0 +1,19 @@
+<div class="card metric-card shadow-sm rounded fixed-card-height">
+  <div class="card-body text-center">
+    <i [class]="iconClass + ' metric-icon ' + iconColor + ' mb-2'"></i>
+    <h5 class="card-title fw-bold">{{ title }}</h5>
+    <hr>
+    <div class="mb-3">
+      <span class="badge metric-rating" [ngClass]="ratingValue">
+        {{ ratingValue }}
+      </span>
+      <p class="card-text mt-2">
+        {{ ratingDescription }}
+      </p>
+    </div>
+    <div>
+      <h4 class="fw-bold">{{ count }}</h4>
+      <p class="text-muted">Open Issues</p>
+    </div>
+  </div>
+</div>

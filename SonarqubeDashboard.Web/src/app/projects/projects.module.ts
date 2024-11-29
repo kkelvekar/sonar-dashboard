@@ -10,6 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectRoutingModule } from './projects-routing.module';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
+import { ProjectDetailsMetricCardComponent } from './project-details/project-details-metric-card/project-details-metric-card.component';
+import { ProjectDetailsProgressCardComponent } from './project-details/project-details-progress-card/project-details-progress-card.component';
+import { ProjectDetailsQualityGateCardComponent } from './project-details/project-details-quality-gate-card/project-details-quality-gate-card.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
     ProjectSidebarFilterComponent,
     ProjectToolbarFilterComponent,
     ProjectsComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
+    ProjectDetailsMetricCardComponent,
+    ProjectDetailsProgressCardComponent,
+    ProjectDetailsQualityGateCardComponent,
   ],
   imports: [
     CommonModule,

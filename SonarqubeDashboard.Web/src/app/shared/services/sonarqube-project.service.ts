@@ -13,7 +13,7 @@ export class SonarQubeProjectService {
   constructor(private http: HttpClient) { }
 
   getProjectsByGroup(): Observable<SonarQubeProjectGroupData[]> {
-    const url = `${environment.projectApiUrl}/api/sonarqube-project/projects-by-group`;
+    const url = `${environment.projectApiUrl}/api/projects`;
     let data = this.http.get<SonarQubeProjectGroupData[]>(url).pipe(
       catchError(error => {
         console.error('Error fetching projects by group:', error);

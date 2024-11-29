@@ -1,0 +1,16 @@
+.progress {
+  position: relative;
+  height: 1.2rem;
+  font-size: 0.85rem;
+  line-height: 1.2rem;
+}
+
+.progress-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  left: 0;
+  top: 0;
+  font-weight: bold;
+  color: black;
+}
