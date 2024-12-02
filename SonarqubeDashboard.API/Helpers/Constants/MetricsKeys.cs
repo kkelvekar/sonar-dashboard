@@ -14,6 +14,7 @@
         public const string NewCoverage = "new_coverage";
         public const string NewDuplicatedLinesDensity = "new_duplicated_lines_density";
         public const string NewLines = "new_lines";
+        public const string NewLinesToCover = "new_lines_to_cover";
 
         // Individual metric keys for overall code
         public const string Bugs = "bugs";
