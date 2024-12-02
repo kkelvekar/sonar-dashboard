@@ -5,14 +5,14 @@ using System.Text.Json;
 namespace SonarqubeDashboard.API.Services
 {
     public class ProjectDataService
-    {
-        private readonly MetricsService _metricsService;
+    {      
+        private readonly SonarqubeMeasuresService _sonarqubeMeasuresService;
         private Task<List<SonarqubeProject>> _projectsTask;
         private Task<List<MetricDefinition>> _metricDefinitionsTask;
 
-        public ProjectDataService(MetricsService metricsService)
-        {
-            _metricsService = metricsService;
+        public ProjectDataService(SonarqubeMeasuresService sonarqubeMeasuresService)
+        {       
+            _sonarqubeMeasuresService = sonarqubeMeasuresService;
         }
 
         public Task<List<SonarqubeProject>> Projects => _projectsTask ??= LoadProjectsAsync();
@@ -27,7 +27,7 @@ namespace SonarqubeDashboard.API.Services
             {
                 try
                 {
-                    project.Metrics = await _metricsService.GetProjectMetrics(project.ProjectKey, project.ProjectToken);
+                    project.Metrics = await _sonarqubeMeasuresService.GetProjectMetrics(project.ProjectKey);
                 }
                 catch (Exception ex)
                 {
@@ -38,7 +38,8 @@ namespace SonarqubeDashboard.API.Services
             });
 
             var projectsWithMetrics = await Task.WhenAll(tasks);
-            return projectsWithMetrics.ToList();
+            var projects = projectsWithMetrics.Where(p => p.Metrics.Any(x => x.Value != "Project has not been found")).ToList();
+            return projects;
         }
 
         private async Task<List<SonarqubeProject>> GetProjectListFromJSON()

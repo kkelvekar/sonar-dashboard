@@ -31,9 +31,12 @@
   word-break: break-word;
 }
 
+.quality-gate-header {
+  margin-bottom: 1rem;
+}
+
 .section-title {
   font-size: 1.2rem;
-  margin-bottom: 1rem;
   display: flex;
   align-items: center;
 }

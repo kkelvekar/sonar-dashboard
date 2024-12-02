@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Humanizer" Version="2.14.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <EmbeddedResource Include="Data\metric-definitions.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

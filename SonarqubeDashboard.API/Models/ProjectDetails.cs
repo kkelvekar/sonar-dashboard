@@ -7,6 +7,7 @@ namespace SonarqubeDashboard.API.Models
         public string ProjectKey { get; set; }
         public string ProjectName { get; set; }
         public string ProjectGroup { get; set; }
+        public Period Period { get; set; }
         public ProjectQualityGate QualityGate { get; set; }
         public ProjectMeasures NewCodeMetrics { get; set; }
         public ProjectMeasures OverallCodeMetrics { get; set; }
@@ -57,5 +58,17 @@ namespace SonarqubeDashboard.API.Models
         public string ActualValue { get; set; }
 
         public string Message { get; set; }
+    }
+
+    public class Period
+    {
+        public NewCodeBaseLine NewCodeBaseLine { get; set; }
+        public string LastAnalysis { get; set; }
+    }
+
+    public class NewCodeBaseLine
+    {
+        public string Date { get; set; }
+        public string HumanizeDate { get; set; }
     }
 }

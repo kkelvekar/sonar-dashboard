@@ -11,7 +11,11 @@ namespace SonarqubeDashboard.API.Services
         private readonly HttpClient _httpClient;
         private readonly ILogger<SonarqubeMeasuresService> _logger;
 
-        public record ComponentMeasures(Component Component);
+        // Updated records
+        public record ComponentMeasures(Component Component, TopLevelPeriod Period);
+
+        public record TopLevelPeriod(int Index, string Mode, string Date, string Parameter);
+
         public record Component(string Key, string Name, string Qualifier, List<Measure> Measures);
 
         public record Measure(string Metric, string Value, bool? BestValue, Period Period);
@@ -25,10 +29,9 @@ namespace SonarqubeDashboard.API.Services
             _logger = logger;
         }
 
-        public async Task<Component> GetComponentMeasures(string projectKey)
+        public async Task<ComponentMeasures> GetComponentMeasures(string projectKey, string metricKeys)
         {
-            var metricKeys = string.Join(",", MetricsKeys.AllMetricKeys);
-            var url = $"api/measures/component?component={Uri.EscapeDataString(projectKey)}&metricKeys={metricKeys}";
+            var url = $"api/measures/component?component={Uri.EscapeDataString(projectKey)}&metricKeys={metricKeys}&additionalFields=period";
             try
             {
                 var response = await _httpClient.GetAsync(url);
@@ -53,7 +56,48 @@ namespace SonarqubeDashboard.API.Services
             return null;
         }
 
-        private Component ParseComponentMeasures(string content)
+        // New method to map measures to ProjectMetric
+        public async Task<List<ProjectMetric>> GetProjectMetrics(string projectKey)
+        {
+            var metricKeys = MetricsKeys.OverallCodeMetricKeys.Concat(new[] { "alert_status" }).ToList();
+            var componentMeasures = await GetComponentMeasures(projectKey, string.Join(",", metricKeys));
+
+            if (componentMeasures?.Component?.Measures == null)
+            {
+                return new List<ProjectMetric>();
+            }
+
+            var projectMetrics = componentMeasures.Component.Measures.Select(measure =>
+            {
+                string value = measure.Value ?? measure.Period?.Value;
+
+                if ((measure.Metric.Contains(MetricsKeys.DuplicatedLinesDensity, StringComparison.OrdinalIgnoreCase) || (measure.Metric.Contains(MetricsKeys.Coverage, StringComparison.OrdinalIgnoreCase))) && value != null)
+                {
+                    value = $"{value}%";
+                }
+
+                if (measure.Metric.Contains(MetricsKeys.Ncloc, StringComparison.OrdinalIgnoreCase) && value != null)
+                {
+                    value = FormatNumber(value);
+                }
+
+
+                if (measure.Metric.Contains("alert_status", StringComparison.OrdinalIgnoreCase) && value != null)
+                {
+                    value = value == "OK" ? "passed" : "failed";
+                }
+
+                return new ProjectMetric
+                {
+                    Name = measure.Metric,
+                    Value = value
+                };
+            }).ToList();
+
+            return projectMetrics;
+        }
+
+        private ComponentMeasures ParseComponentMeasures(string content)
         {
             var options = new JsonSerializerOptions
             {
@@ -62,6 +106,7 @@ namespace SonarqubeDashboard.API.Services
 
             // Deserialize into the wrapper class
             var componentResponse = JsonSerializer.Deserialize<ComponentMeasures>(content, options);
+
             var component = componentResponse?.Component;
 
             if (component?.Measures != null)
@@ -84,14 +129,14 @@ namespace SonarqubeDashboard.API.Services
                             return measure with { Period = newPeriod };
                         }
                     }
-
                     return measure;
                 }).ToList();
 
+                // Update the component with the modified measures
                 component = component with { Measures = updatedMeasures };
+                componentResponse = componentResponse with { Component = component };
             }
-
-            return component;
+            return componentResponse;
         }
 
         private string ConvertRating(string value)
@@ -106,6 +151,24 @@ namespace SonarqubeDashboard.API.Services
                 _ => "Unknown"
             };
         }
+
+        private string FormatNumber(string numberString)
+        {
+            if (double.TryParse(numberString, out double number))
+            {
+                if (number >= 1000)
+                {
+                    number = Math.Round(number / 1000, 1);
+                    return $"{number}k";
+                }
+                else
+                {
+                    return number.ToString();
+                }
+            }
+            return numberString;
+        }
+
 
     }
 

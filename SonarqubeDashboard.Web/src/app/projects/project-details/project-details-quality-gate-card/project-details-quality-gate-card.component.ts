@@ -8,4 +8,5 @@ import { ProjectQualityGate } from '../project.detail';
 })
 export class ProjectDetailsQualityGateCardComponent {
   @Input() qualityGate: ProjectQualityGate | undefined = undefined;
+  @Input() lastAnalysis: string | undefined = '';
 }

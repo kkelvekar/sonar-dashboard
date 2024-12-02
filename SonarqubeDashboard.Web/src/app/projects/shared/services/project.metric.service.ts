@@ -14,13 +14,8 @@ export class ProjectMetricService {
 
   // Helper method to find a metric by name
   getRatingValue(metrics: SonarQubeProjectMetricData[], metricName: string): string {
-    if (metricName === 'security_review_rating') {
-      let metric = metrics.find(m => m.name === 'vulnerabilities');
-      return this.getSecurityReviewRating(metric?.value as number);
-    } else {
       let metric = metrics.find(m => m.name === metricName);
       return metric?.value as string;
-    }
   }
 
   // Method to apply conditional logic for security review rating

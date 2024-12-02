@@ -30,7 +30,7 @@
         public const string Ncloc = "ncloc";
 
         // Read-only lists for new code and overall code metric keys
-        public static readonly IReadOnlyList<string> NewCodeMetricKeys = new[]
+        public static readonly IList<string> NewCodeMetricKeys = new[]
         {
         NewBugs,
         NewReliabilityRating,
@@ -45,7 +45,7 @@
         NewLines
     };
 
-        public static readonly IReadOnlyList<string> OverallCodeMetricKeys = new[]
+        public static readonly IList<string> OverallCodeMetricKeys = new[]
         {
         Bugs,
         ReliabilityRating,
@@ -61,7 +61,7 @@
     };
 
         // Combined list of all metric keys (new + overall)
-        public static readonly IReadOnlyList<string> AllMetricKeys =
+        public static readonly IList<string> AllMetricKeys =
             NewCodeMetricKeys.Concat(OverallCodeMetricKeys).ToList();
     }
 

@@ -1,4 +1,7 @@
-﻿using SonarqubeDashboard.API.Models;
+﻿using Humanizer;
+using Humanizer.Localisation;
+using SonarqubeDashboard.API.Helpers.Constants;
+using SonarqubeDashboard.API.Models;
 using System.Reflection;
 using System.Text.Json;
 using static SonarqubeDashboard.API.Services.SonarqubeMeasuresService;
@@ -10,12 +13,14 @@ namespace SonarqubeDashboard.API.Services
         private readonly ProjectDataService _projectDataService;
         private readonly SonarqubeQualityGateSerivce _sonarqubeQualityGateService;
         private readonly SonarqubeMeasuresService _sonarqubeMeasuresService;
+        private readonly SonarqubeProjectAnalyses _sonarqubeProjectAnalyses;
 
-        public ProjectDetailService(ProjectDataService projectDataService, SonarqubeQualityGateSerivce sonarqubeQualityGateSerivce, SonarqubeMeasuresService sonarqubeMeasuresService)
+        public ProjectDetailService(ProjectDataService projectDataService, SonarqubeQualityGateSerivce sonarqubeQualityGateSerivce, SonarqubeMeasuresService sonarqubeMeasuresService, SonarqubeProjectAnalyses sonarqubeProjectAnalyses)
         {
             _projectDataService = projectDataService;
             _sonarqubeQualityGateService = sonarqubeQualityGateSerivce;
             _sonarqubeMeasuresService = sonarqubeMeasuresService;
+            _sonarqubeProjectAnalyses = sonarqubeProjectAnalyses;
         }
 
         public async Task<ProjectDetails> GetProjectDetails(string projectKey)
@@ -32,25 +37,60 @@ namespace SonarqubeDashboard.API.Services
             var metrics = project.Metrics.ToDictionary(m => m.Name, m => m.Value);
             var metricDefs = metricDefinitions.ToDictionary(md => md.Code);
 
-            var component = await _sonarqubeMeasuresService.GetComponentMeasures(projectKey);
+            var componentMeasures = await _sonarqubeMeasuresService.GetComponentMeasures(projectKey, string.Join(",", MetricsKeys.AllMetricKeys));
 
-            if (component == null)
+            if (componentMeasures?.Component == null)
             {
                 return null;
             }
+
 
             var result = new ProjectDetails
             {
                 ProjectKey = project.ProjectKey,
                 ProjectName = project.ProjectName,
                 ProjectGroup = project.ProjectGroup,
+                Period = new()
+                {
+                    NewCodeBaseLine = componentMeasures.Period.Date != null
+                    ? GetHumanizeNewCodeBaseLine(DateTime.Parse("2022-11-04T20:05:54+0000")) : null,
+                    LastAnalysis = await GetHumanizeLastAnalysisDate(projectKey)
+                },
                 QualityGate = await GetQualityGate(projectKey, project),
-                NewCodeMetrics = MapMeasures(component.Measures, metricDefs, isNewCode: true),
-                OverallCodeMetrics = MapMeasures(component.Measures, metricDefs, isNewCode: false)
+                NewCodeMetrics = MapMeasures(componentMeasures.Component.Measures, metricDefs, isNewCode: true),
+                OverallCodeMetrics = MapMeasures(componentMeasures.Component.Measures, metricDefs, isNewCode: false)
             };
 
             return result;
 
+        }
+
+        private NewCodeBaseLine GetHumanizeNewCodeBaseLine(DateTime? periodDate)
+        {
+            if (periodDate == null)
+            {
+                return null;
+            }
+
+            var date = periodDate.Value;
+            var timeDifference = DateTime.Now - date;
+            string humanizeResult = timeDifference.Humanize(maxUnit: TimeUnit.Year, precision: 2);
+            var result =  new NewCodeBaseLine() { HumanizeDate = $"Started {humanizeResult} ago", Date = $"Since {periodDate.Value.ToLongDateString()}"};
+            return result;
+        }
+
+        private async Task<string> GetHumanizeLastAnalysisDate(string projectKey)
+        {
+            var periodDate = await _sonarqubeProjectAnalyses.GetLastAnalysisDateTime(projectKey);
+            if (periodDate == null)
+            {
+                return null;
+            }
+
+            var date = periodDate.Value;
+            var timeDifference = DateTime.Now - date;
+            string humanizeResult = timeDifference.Humanize(maxUnit: TimeUnit.Year, precision: 1);
+            return $"{humanizeResult} ago";
         }
 
         private async Task<ProjectQualityGate> GetQualityGate(string projectKey, SonarqubeProject project)

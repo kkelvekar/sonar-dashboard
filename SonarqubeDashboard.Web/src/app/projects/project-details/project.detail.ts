@@ -2,6 +2,7 @@ export interface ProjectDetails {
   projectKey: string;
   projectName: string;
   projectGroup: string;
+  period: Period;
   qualityGate: ProjectQualityGate;
   newCodeMetrics: ProjectMeasures;
   overallCodeMetrics: ProjectMeasures;
@@ -43,4 +44,14 @@ export interface Rating {
 export interface QualityGateCondition {
   actualValue: string;
   message: string;
+}
+
+export interface Period {
+  newCodeBaseLine: NewCodeBaseLine;
+  lastAnalysis: string;
+}
+
+export interface NewCodeBaseLine {
+  date: string;
+  humanizeDate: string;
 }

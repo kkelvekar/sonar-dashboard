@@ -13,7 +13,7 @@ namespace SonarqubeDashboard.API.Services
     {
         private readonly ProjectDataService _projectDataService;
 
-        public ProjectService(MetricsService sonarQubeMetricsService, ProjectDataService projectDataService)
+        public ProjectService(ProjectDataService projectDataService)
         {
             _projectDataService = projectDataService;
         }

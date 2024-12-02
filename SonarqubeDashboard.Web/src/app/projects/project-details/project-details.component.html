@@ -18,7 +18,7 @@
   <!-- Quality Gate Status Row -->
   <div class="row">
     <div class="col-md-6">
-      <project-details-quality-gate-card [qualityGate]="projectDetails?.qualityGate"></project-details-quality-gate-card>
+      <project-details-quality-gate-card [qualityGate]="projectDetails?.qualityGate" [lastAnalysis]="projectDetails?.period?.lastAnalysis"></project-details-quality-gate-card>
     </div>
   </div>
 
@@ -27,16 +27,15 @@
     <ul class="nav nav-tabs" id="metricsTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="new-code-tab" data-bs-toggle="tab" data-bs-target="#newCode" type="button"
-          role="tab" aria-controls="newCode" aria-selected="true">
+          role="tab" aria-controls="newCode" aria-selected="true" [title]="projectDetails?.period?.newCodeBaseLine?.date">
           New Code
-          <span class="d-block text-muted small">Last Analyze - 3 months ago</span>
+          <span class="d-block text-muted small" *ngIf="projectDetails?.period?.newCodeBaseLine?.humanizeDate">{{projectDetails?.period?.newCodeBaseLine?.humanizeDate}}</span>
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="overall-code-tab" data-bs-toggle="tab" data-bs-target="#overallCode" type="button"
           role="tab" aria-controls="overallCode" aria-selected="false">
           Overall Code
-          <span class="d-block text-muted small">Since 25th Dec 2025</span>
         </button>
       </li>
     </ul>
