@@ -1,19 +1,20 @@
-﻿using SonarqubeDashboard.API.Models;
+﻿using SonarqubeDashboard.API.Interfaces;
+using SonarqubeDashboard.API.Models;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace SonarqubeDashboard.API.Services
 {
-    public class SonarqubeQualityGateSerivce
+    public record ProjectStatusResponse(ProjectStatus ProjectStatus);
+    public record ProjectStatus(string Status, bool IgnoredConditions, string CaycStatus, List<Condition> Conditions, Period Period);
+    public record Condition(string Status, string MetricKey, string Comparator, string? ErrorThreshold, string ActualValue);
+    public record Period(string Mode, string Date, string Parameter);
+
+    public class SonarqubeQualityGateSerivce : ISonarqubeQualityGateSerivce
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<SonarqubeQualityGateSerivce> _logger;
-
-        private sealed record ProjectStatusResponse(ProjectStatus ProjectStatus);
-        private sealed record ProjectStatus(string Status, bool IgnoredConditions, string CaycStatus, List<Condition> Conditions, Period Period);
-        private sealed record Condition(string Status, string MetricKey, string Comparator, string? ErrorThreshold, string ActualValue);
-        private sealed record Period(string Mode, string Date, string Parameter);
 
         public SonarqubeQualityGateSerivce(HttpClient httpClient, ILogger<SonarqubeQualityGateSerivce> logger)
         {
@@ -127,13 +128,13 @@ namespace SonarqubeDashboard.API.Services
                             // Handle unknown metric keys
                             message = $"Metric '{metricKey}' {ReplaceComperator(comparator)} of {errorThreshold}%.";
                         }
-                      
+
                         var conditionResult = new QualityGateCondition()
                         {
                             ActualValue = $"{actualValue}%",
                             Message = message
                         };
-                      
+
                         result.Add(conditionResult);
                     }
                 }
@@ -159,7 +160,7 @@ namespace SonarqubeDashboard.API.Services
             if (string.IsNullOrEmpty(comperator))
                 return comperator;
 
-            return comperator              
+            return comperator
                 .Replace("GT", "is greater than")
                 .Replace("LT", "is less than");
         }

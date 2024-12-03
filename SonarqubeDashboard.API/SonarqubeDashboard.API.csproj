@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Data\metric-definitions.json" />
+    <Content Remove="Data\rating-descriptions.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Humanizer" Version="2.14.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <EmbeddedResource Include="Data\metric-definitions.json">
+    <EmbeddedResource Include="Data\rating-descriptions.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
 	<EmbeddedResource Include="Data\projects.json">

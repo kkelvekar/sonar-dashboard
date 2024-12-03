@@ -1,3 +1,4 @@
+using SonarqubeDashboard.API.Interfaces;
 using SonarqubeDashboard.API.Services;
 using System.Net.Http.Headers;
 using System.Text;
@@ -30,9 +31,8 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddScoped<ProjectService>();
-builder.Services.AddScoped<ProjectDetailService>();
-builder.Services.AddScoped<ProjectDataService>();
+builder.Services.AddScoped<IProjectService, ProjectJsonService>();
+builder.Services.AddScoped<IProjectDetailService, ProjectDetailService>();
 
 // Shared configuration for SonarQube HttpClients
 void ConfigureSonarQubeClient(HttpClient client)
@@ -48,9 +48,9 @@ void ConfigureSonarQubeClient(HttpClient client)
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64Credentials);
 }
 
-builder.Services.AddHttpClient<SonarqubeMeasuresService>(ConfigureSonarQubeClient);
-builder.Services.AddHttpClient<SonarqubeQualityGateSerivce>(ConfigureSonarQubeClient);
-builder.Services.AddHttpClient<SonarqubeProjectAnalyses>(ConfigureSonarQubeClient);
+builder.Services.AddHttpClient<ISonarqubeMeasuresService, SonarqubeMeasuresService>(ConfigureSonarQubeClient);
+builder.Services.AddHttpClient<ISonarqubeQualityGateSerivce ,SonarqubeQualityGateSerivce>(ConfigureSonarQubeClient);
+builder.Services.AddHttpClient<ISonarqubeProjectAnalyses ,SonarqubeProjectAnalyses>(ConfigureSonarQubeClient);
 
 var app = builder.Build();
 

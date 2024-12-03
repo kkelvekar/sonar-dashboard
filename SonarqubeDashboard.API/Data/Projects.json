@@ -2,37 +2,31 @@
   {
     "project_key": "Image-Gallery-Azure-B2C",
     "project_name": "Image Gallery Azure B2C",
-    "project_group": "Group 1",
-    "project_token": "sqb_1e149f2fb57ba5c57e95d68cf5affcd857599003"
+    "project_group": "Group 1"
   },
   {
     "project_key": "Globo-Ticket-Management",
     "project_name": "Globo Ticket Management",
-    "project_group": "Group 1",
-    "project_token": "sqb_5033acffb797366341fa1c64e61581d391e22792"
+    "project_group": "Group 1"
   },
   {
     "project_key": "FrontBackSync",
     "project_name": "FrontBackSync",
-    "project_group": "Group 2",
-    "project_token": "sqb_5e4b3494b9e1eaa667e9f9eab30ce71f835483bb"
+    "project_group": "Group 2"
   },
   {
     "project_key": "Open-Telemetry-Study",
     "project_name": "Open Telemetry Study",
-    "project_group": "Group 3",
-    "project_token": "sqb_c8a30aac2889c168d2b104f1c09ab1dd99f72b74"
+    "project_group": "Group 3"
   },
   {
     "project_key": "CSharpCodingPractice",
     "project_name": "CSharpCodingPractice",
-    "project_group": "Group 3",
-    "project_token": "sqb_c99a7c55301eae85fdc75b467e95016442da41b8"
+    "project_group": "Group 3"
   },
   {
     "project_key": "XXX",
     "project_name": "XXX",
-    "project_group": "Group 3",
-    "project_token": "sqb_c99a7c55301eae85fdc75b467e95016442da41b8"
+    "project_group": "Group 3"
   }
 ]
