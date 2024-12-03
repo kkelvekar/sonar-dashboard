@@ -9,8 +9,8 @@ namespace SonarqubeDashboard.API.Models
         public string ProjectGroup { get; set; }
         public Period Period { get; set; }
         public ProjectQualityGate QualityGate { get; set; }
-        public ProjectMeasures NewCodeMetrics { get; set; }
-        public ProjectMeasures OverallCodeMetrics { get; set; }
+        public NewCodeProjectMeasures NewCodeMetrics { get; set; }
+        public OverallCodeProjectMeasures OverallCodeMetrics { get; set; }
     }
 
     public class ProjectQualityGate
@@ -31,6 +31,17 @@ namespace SonarqubeDashboard.API.Models
         public string Ncloc { get; set; }
     }
 
+    public class NewCodeProjectMeasures : ProjectMeasures
+    {
+        public string NewLines { get; set; }
+        public string NewLinesToCover { get; set; }
+    }
+
+    public class OverallCodeProjectMeasures : ProjectMeasures
+    {
+        public string Lines { get; set; }
+        public string LinesToCover { get; set; }
+    }
 
     public abstract class ProjectMetricBase
     {

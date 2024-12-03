@@ -4,8 +4,8 @@ export interface ProjectDetails {
   projectGroup: string;
   period: Period;
   qualityGate: ProjectQualityGate;
-  newCodeMetrics: ProjectMeasures;
-  overallCodeMetrics: ProjectMeasures;
+  newCodeMetrics: NewCodeProjectMeasures;
+  overallCodeMetrics: OverallCodeProjectMeasures;
 }
 
 export interface ProjectQualityGate {
@@ -21,6 +21,16 @@ export interface ProjectMeasures {
   coverage: string;
   duplicatedLinesDensity: string;
   ncloc: string;
+}
+
+export interface NewCodeProjectMeasures extends ProjectMeasures {
+  newLines: string;
+  newLinesToCover: string;
+}
+
+export interface OverallCodeProjectMeasures extends ProjectMeasures {
+  lines: string;
+  linesToCover: string;
 }
 
 export interface ProjectMetricBase {

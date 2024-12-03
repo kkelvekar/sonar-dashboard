@@ -16,16 +16,14 @@ export class ProjectDetailsComponent implements OnInit {
   // Overall Metrics
   overallCoverageValue: number = 0;
   overallDuplicatedLinesDensityValue: number = 0;
+  overallCodeMetricsArray: any[] = [];
 
   // New Code Metrics
   newCoverageValue: number = 0;
   newDuplicatedLinesDensityValue: number = 0;
+  newCodeMetricsArray: any[] = [];
 
   isLoading: boolean = true;
-
-  // Arrays to hold metrics for iteration
-  newCodeMetricsArray: any[] = [];
-  overallCodeMetricsArray: any[] = [];
 
   constructor(
     private route: ActivatedRoute, // Inject ActivatedRoute

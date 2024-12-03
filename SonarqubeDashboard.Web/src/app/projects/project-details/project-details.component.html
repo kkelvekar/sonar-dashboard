@@ -64,14 +64,16 @@
             <project-details-progress-card
               [title]="'Coverage'"
               [value]="newCoverageValue"
-              [displayValue]="projectDetails?.newCodeMetrics?.coverage || '0%'">
+              [displayValue]="projectDetails?.newCodeMetrics?.coverage || '0'"
+              [description]="'Coverage on ' + projectDetails?.newCodeMetrics?.newLinesToCover + ' new lines to cover'">
             </project-details-progress-card>
           </div>
           <div class="col-md-6">
             <project-details-progress-card
               [title]="'Duplications'"
               [value]="newDuplicatedLinesDensityValue"
-              [displayValue]="projectDetails?.newCodeMetrics?.duplicatedLinesDensity || '0%'">
+              [displayValue]="projectDetails?.newCodeMetrics?.duplicatedLinesDensity || '0'"
+              [description]="'Duplication on ' + projectDetails?.newCodeMetrics?.newLines + ' new lines'">
             </project-details-progress-card>
           </div>
         </div>
@@ -100,14 +102,16 @@
             <project-details-progress-card
               [title]="'Coverage'"
               [value]="overallCoverageValue"
-              [displayValue]="projectDetails?.overallCodeMetrics?.coverage || '0%'">
+              [displayValue]="projectDetails?.overallCodeMetrics?.coverage || '0'"
+              [description]="'Coverage on ' + projectDetails?.overallCodeMetrics?.linesToCover + ' lines to cover'">
             </project-details-progress-card>
           </div>
           <div class="col-md-6">
             <project-details-progress-card
               [title]="'Duplications'"
               [value]="overallDuplicatedLinesDensityValue"
-              [displayValue]="projectDetails?.overallCodeMetrics?.duplicatedLinesDensity || '0%'">
+              [displayValue]="projectDetails?.overallCodeMetrics?.duplicatedLinesDensity || '0'"
+              [description]="'Duplication on ' + projectDetails?.overallCodeMetrics?.lines + ' lines'">
             </project-details-progress-card>
           </div>
         </div>

@@ -28,6 +28,8 @@
         public const string Coverage = "coverage";
         public const string DuplicatedLinesDensity = "duplicated_lines_density";
         public const string Ncloc = "ncloc";
+        public const string LinesToCover = "lines_to_cover";
+        public const string Lines = "lines";
 
         // Read-only lists for new code and overall code metric keys
         public static readonly IList<string> NewCodeMetricKeys = new[]
@@ -42,7 +44,8 @@
         NewMaintainabilityRating,
         NewCoverage,
         NewDuplicatedLinesDensity,
-        NewLines
+        NewLines,
+        NewLinesToCover
     };
 
         public static readonly IList<string> OverallCodeMetricKeys = new[]
@@ -57,7 +60,9 @@
         SqaleRating,
         Coverage,
         DuplicatedLinesDensity,
-        Ncloc
+        Ncloc,
+        LinesToCover,
+        Lines
     };
 
         // Combined list of all metric keys (new + overall)

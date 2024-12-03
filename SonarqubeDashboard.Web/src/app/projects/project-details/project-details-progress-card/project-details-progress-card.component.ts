@@ -9,6 +9,7 @@ export class ProjectDetailsProgressCardComponent {
   @Input() title: string = '';
   @Input() value: number = 0;
   @Input() displayValue: string = '0%';
+  @Input() description: string = '';
 
   get progressBarClass(): string {
     if (this.value < 30) {

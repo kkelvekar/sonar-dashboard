@@ -53,29 +53,29 @@ namespace SonarqubeDashboard.API.Services
                 Period = new()
                 {
                     NewCodeBaseLine = componentMeasures.Period.Date != null
-                    ? GetHumanizeNewCodeBaseLine(DateTime.Parse("2022-11-04T20:05:54+0000")) : null,
+                    ? GetHumanizeNewCodeBaseLine(componentMeasures.Period.Date) : null,
                     LastAnalysis = await GetHumanizeLastAnalysisDate(projectKey)
                 },
                 QualityGate = await GetQualityGate(projectKey, project),
-                NewCodeMetrics = MapMeasures(componentMeasures.Component.Measures, metricDefs, isNewCode: true),
-                OverallCodeMetrics = MapMeasures(componentMeasures.Component.Measures, metricDefs, isNewCode: false)
+                NewCodeMetrics = MapMeasures<NewCodeProjectMeasures>(componentMeasures.Component.Measures, metricDefs, isNewCode: true),
+                OverallCodeMetrics = MapMeasures<OverallCodeProjectMeasures>(componentMeasures.Component.Measures, metricDefs, isNewCode: false)
             };
 
             return result;
 
         }
 
-        private NewCodeBaseLine GetHumanizeNewCodeBaseLine(DateTime? periodDate)
+        private NewCodeBaseLine GetHumanizeNewCodeBaseLine(string periodDate)
         {
-            if (periodDate == null)
+            if (string.IsNullOrEmpty(periodDate))
             {
                 return null;
             }
 
-            var date = periodDate.Value;
+            var date = DateTime.Parse(periodDate);
             var timeDifference = DateTime.Now - date;
             string humanizeResult = timeDifference.Humanize(maxUnit: TimeUnit.Year, precision: 2);
-            var result =  new NewCodeBaseLine() { HumanizeDate = $"Started {humanizeResult} ago", Date = $"Since {periodDate.Value.ToLongDateString()}"};
+            var result =  new NewCodeBaseLine() { HumanizeDate = $"Started {humanizeResult} ago", Date = $"Since {date.ToLongDateString()}"};
             return result;
         }
 
@@ -105,10 +105,9 @@ namespace SonarqubeDashboard.API.Services
             };
         }
 
-        private ProjectMeasures MapMeasures(List<Measure> measures, Dictionary<string, MetricDefinition> metricDefinitions, bool isNewCode)
+        private T MapMeasures<T>(List<Measure> measures, Dictionary<string, MetricDefinition> metricDefinitions, bool isNewCode) where T : ProjectMeasures, new()
         {
-            var projectMeasures = new ProjectMeasures();
-
+            var projectMeasures = new T();
             var prefix = isNewCode ? "new_" : "";
 
             // Mapping Bugs
@@ -137,29 +136,25 @@ namespace SonarqubeDashboard.API.Services
 
             // Mapping Code Smells
             var codeSmellsMetric = measures.FirstOrDefault(m => m.Metric == $"{prefix}code_smells");
-            var codeSmellsRatingMetric = isNewCode ? measures.FirstOrDefault(m => m.Metric == $"{prefix}maintainability_rating") : measures.FirstOrDefault(m => m.Metric == "sqale_rating");
+            var codeSmellsRatingMetric = isNewCode
+                ? measures.FirstOrDefault(m => m.Metric == $"{prefix}maintainability_rating")
+                : measures.FirstOrDefault(m => m.Metric == "sqale_rating");
             projectMeasures.CodeSmells = CreateProjectMetric<ProjectCodeSmell>(
                 codeSmellsMetric,
                 codeSmellsRatingMetric,
                 metricDefinitions);
 
-            // Mapping Coverage, Duplicated Lines Density, and Ncloc (only for overall code metrics)
-            if (!isNewCode)
-            {
-                projectMeasures.Coverage = GetValue(measures, "coverage");
-                projectMeasures.DuplicatedLinesDensity = GetValue(measures, "duplicated_lines_density");
-                projectMeasures.Ncloc = GetValue(measures, "ncloc");
-            }
-            else
-            {
-                projectMeasures.Coverage = GetValue(measures, $"{prefix}coverage");
-                projectMeasures.DuplicatedLinesDensity = GetValue(measures, $"{prefix}duplicated_lines_density");
-                projectMeasures.Ncloc = GetValue(measures, $"new_lines");
-            }
+            // Common metrics
+            projectMeasures.Coverage = GetValue(measures, $"{prefix}coverage");
+            projectMeasures.DuplicatedLinesDensity = GetValue(measures, $"{prefix}duplicated_lines_density");
+            projectMeasures.Ncloc = GetValue(measures, $"ncloc");
+
+            // Specific metrics
+            // Set specific metrics for lines and lines to cover
+            SetLinesMetrics(projectMeasures, measures, prefix);
 
             return projectMeasures;
         }
-
         private T CreateProjectMetric<T>(Measure countMeasure, Measure ratingMeasure, Dictionary<string, MetricDefinition> metricDefinitions) where T : ProjectMetricBase, new()
         {
             var ratingCode = ratingMeasure?.Metric;
@@ -215,5 +210,43 @@ namespace SonarqubeDashboard.API.Services
 
             return string.Empty;
         }
+
+        private string FormatNumber(string numberString)
+        {
+            if (double.TryParse(numberString, out double number))
+            {
+                if (number >= 1000)
+                {
+                    number = Math.Round(number / 1000, 1);
+                    return $"{number}k";
+                }
+                else
+                {
+                    return number.ToString();
+                }
+            }
+            return numberString;
+        }
+
+        private void SetLinesMetrics(ProjectMeasures projectMeasures, List<Measure> measures, string prefix)
+        {
+            var linesMetric = $"{prefix}lines";
+            var linesToCoverMetric = $"{prefix}lines_to_cover";
+
+            var linesValue = FormatNumber(GetValue(measures, linesMetric));
+            var linesToCoverValue = FormatNumber(GetValue(measures, linesToCoverMetric));
+
+            if (projectMeasures is NewCodeProjectMeasures newCodeMeasures)
+            {
+                newCodeMeasures.NewLines = linesValue;
+                newCodeMeasures.NewLinesToCover = linesToCoverValue;
+            }
+            else if (projectMeasures is OverallCodeProjectMeasures overallMeasures)
+            {
+                overallMeasures.Lines = linesValue;
+                overallMeasures.LinesToCover = linesToCoverValue;
+            }
+        }
+
     }
 }
