@@ -1,76 +1,61 @@
-import { Injectable } from "@angular/core";
-import { ProjectList } from "../../project-list/project-list";
-import { SonarQubeProjectData, SonarQubeProjectGroupData } from "../../../shared/services/sonarqube-project.data";
-import _ from "lodash";
-import { BehaviorSubject, Subject } from "rxjs";
-import { ProjectMetricService } from "./project.metric.service";
-import { ProjectGroupService } from "./project.group.service";
-import { SonarQubeProjectService } from "../../../shared/services/sonarqube-project.service";
+import { Injectable } from '@angular/core';
+import { ProjectMetricService } from '../shared/services/project.metric.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable, catchError, of, map } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { ProjectGroupResponse, ProjectResponse } from './project.response';
+import { ProjectGroupService } from './project-group/project.group.service';
+import { ProjectList } from './project-list';
+import { ProjectService } from '../projects/projects.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectDataService {
-  private _projectList = new BehaviorSubject<ProjectList[] | null>(null);
-  projectList$ = this._projectList.asObservable();
-
-  resetFilters$: Subject<void> = new Subject<void>();
+export class ProjectListService {
 
   constructor(
     private projectMetricService: ProjectMetricService,
     private projectGroupService: ProjectGroupService,
-    private sonarQubeProjectService: SonarQubeProjectService
+    private projectService: ProjectService,
+    private http: HttpClient
   ) {
-    this.sonarQubeProjectService.getProjectsByGroup().subscribe((projectGroups: SonarQubeProjectGroupData[] | null) => {
-      if (!_.isNil(projectGroups)) {
-        this.mapSonarQubeDataToProjectData(projectGroups);
-      }
-    });
   }
 
-  public parseLineOfCodeValue(value: string): number {
-    // Remove commas and spaces
-    value = value.replace(/,/g, '').trim();
-
-    const units: { [key: string]: number } = {
-      'k': 1_000,
-      'K': 1_000,
-      'm': 1_000_000,
-      'M': 1_000_000,
-      'b': 1_000_000_000,
-      'B': 1_000_000_000,
-    };
-
-    const regex = /^([\d\.]+)([kKmMbB])?$/;
-    const match = value.match(regex);
-
-    if (match) {
-      const num = parseFloat(match[1]);
-      const unit = match[2];
-
-      if (unit && units[unit]) {
-        return num * units[unit];
-      } else {
-        return num;
-      }
-    } else {
-      return 0;
-    }
+  getProjectList(): Observable<ProjectList[] | null> {
+    const url = `${environment.projectApiUrl}/api/projects`;
+    const data = this.http.get<ProjectGroupResponse[]>(url).pipe(
+      catchError(error => {
+        console.error('Error fetching projects by group:', error);
+        return of([]); // Return an empty array if the HTTP request fails
+      }),
+      map(projectGroups => this.mapSonarQubeDataToProjectData(projectGroups)),
+      map(projectList => {
+        this.projectService.projectList$.next(projectList);
+        const projectGroups = projectList.map(group => group.projectGroup.name);
+        this.projectService.projectGroups$.next(projectGroups);
+        return projectList;
+      }),
+      catchError(error => {
+        console.error('Error in mapping project data:', error);
+        return of(null); // Return null if mapping fails
+      })
+    );
+    return data;
   }
 
-  private mapSonarQubeDataToProjectData(projectGroups: SonarQubeProjectGroupData[]) {
+  private mapSonarQubeDataToProjectData(projectGroups: ProjectGroupResponse[]) : ProjectList[] {
     const projectList: ProjectList[] = projectGroups.map(projectGroupData => this.mapProjectGroupData(projectGroupData));
-    this._projectList.next(projectList);
+    return projectList;
   }
 
-  private mapProjectGroupData(projectGroupData: SonarQubeProjectGroupData): ProjectList {
+  private mapProjectGroupData(projectGroupData: ProjectGroupResponse): ProjectList {
     return {
       projectGroup: this.mapProjectGroup(projectGroupData),
       projectItems: this.mapProjectItems(projectGroupData.projects)
     };
   }
 
-  private mapProjectGroup(projectGroupData: SonarQubeProjectGroupData) {
+  private mapProjectGroup(projectGroupData: ProjectGroupResponse) {
     return {
       name: projectGroupData.name,
       bugs: this.projectGroupService.getTotalBugCount(projectGroupData.projects),
@@ -86,10 +71,10 @@ export class ProjectDataService {
     };
   }
 
-  private mapProjectItems(projects: SonarQubeProjectData[]) {
+  private mapProjectItems(projects: ProjectResponse[]) {
     return projects.map(project => ({
-      key: project.projectKey,
-      name: project.projectName,
+      key: project.key,
+      name: project.name,
       qualityGate: this.projectMetricService.getMetricValue(project.metrics, 'alert_status') as string,
       //qualityGate: _.sample(['passed', 'failed']) as string,
       bugs: parseInt(this.projectMetricService.getMetricValue(project.metrics, 'bugs')),

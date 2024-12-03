@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { SonarQubeProjectData, SonarQubeProjectMetricData } from "../../../shared/services/sonarqube-project.data";
+import { ProjectResponse } from "../project.response";
 import _ from "lodash";
-import { ProjectMetricService } from "./project.metric.service";
+import { ProjectMetricService } from "../../shared/services/project.metric.service";
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,11 @@ export class ProjectGroupService {
 
   constructor(private projectMetricService: ProjectMetricService) { }
 
-  getTotalBugCount(projects: SonarQubeProjectData[]): number {
+  getTotalBugCount(projects: ProjectResponse[]): number {
     return _.sumBy(projects, (project) => Number(this.projectMetricService.getMetricValue(project.metrics, 'bugs')) || 0);
   }
 
-  getAverageReliabilityRating(projects: SonarQubeProjectData[]): string {
+  getAverageReliabilityRating(projects: ProjectResponse[]): string {
     const ratingValues: { [key: string]: number } = { 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5 };
     const numericRatings: number[] = [];
 
@@ -31,11 +31,11 @@ export class ProjectGroupService {
     return averageRating;
   }
 
-  getTotalVulnerabilityCount(projects: SonarQubeProjectData[]): number {
+  getTotalVulnerabilityCount(projects: ProjectResponse[]): number {
     return _.sumBy(projects, (project) => Number(this.projectMetricService.getMetricValue(project.metrics, 'vulnerabilities')) || 0);
   }
 
-  getAverageSecurityRating(projects: SonarQubeProjectData[]): string {
+  getAverageSecurityRating(projects: ProjectResponse[]): string {
     const ratingValues: { [key: string]: number } = { 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5 };
     const numericRatings: number[] = [];
 
@@ -52,11 +52,11 @@ export class ProjectGroupService {
     return averageRating;
   }
 
-  getTotalSecurityHotspots(projects: SonarQubeProjectData[]): number {
+  getTotalSecurityHotspots(projects: ProjectResponse[]): number {
     return _.sumBy(projects, (project) => Number(this.projectMetricService.getMetricValue(project.metrics, 'security_hotspots')) || 0);
   }
 
-  getAverageSecurityReviewRating(projects: SonarQubeProjectData[]): string {
+  getAverageSecurityReviewRating(projects: ProjectResponse[]): string {
     let totalPercentageReviewed = 0;
     let projectCount = projects.length;
 
@@ -83,11 +83,11 @@ export class ProjectGroupService {
     return rating;
   }
 
-  getTotalCodeSmells(projects: SonarQubeProjectData[]): number {
+  getTotalCodeSmells(projects: ProjectResponse[]): number {
     return _.sumBy(projects, (project) => Number(this.projectMetricService.getMetricValue(project.metrics, 'code_smells')) || 0);
   }
 
-  getAverageSqaleRating(projects: SonarQubeProjectData[]): string {
+  getAverageSqaleRating(projects: ProjectResponse[]): string {
     const ratingValues: { [key: string]: number } = { 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5 };
     const numericRatings: number[] = [];
 
@@ -104,7 +104,7 @@ export class ProjectGroupService {
     return averageRating;
   }
 
-  getAverageCoverage(projects: SonarQubeProjectData[]): number {
+  getAverageCoverage(projects: ProjectResponse[]): number {
     let totalCoveredLines = 0;
     let totalLinesToCover = 0;
 
@@ -136,7 +136,7 @@ export class ProjectGroupService {
     return averageCoverage;
   }
 
-  getAverageDuplicatedLinesDensity(projects: SonarQubeProjectData[]): number {
+  getAverageDuplicatedLinesDensity(projects: ProjectResponse[]): number {
     let totalDuplicatedLines = 0;
     let totalLinesOfCode = 0;
 

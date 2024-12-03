@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { SortOption, SortOptions } from './toolbar-filter-data';
-import { ProjectDataService } from '../../shared/services/project.data.service';
 import _ from 'lodash';
-import { ProjectList } from '../../project-list/project-list';
+import { ProjectService as ProjectService } from '../projects.service';
 
 @Component({
   selector: 'project-toolbar-filter',
@@ -20,18 +19,18 @@ export class ProjectToolbarFilterComponent implements OnInit {
   @Output() groupChange = new EventEmitter<string>();
   @Output() sortChange = new EventEmitter<string>();
 
-  constructor(private projectDataService: ProjectDataService) {
+  constructor(private projectService: ProjectService) {
   }
 
   ngOnInit(): void {
     this.sortOptions = SortOptions;
-    this.projectDataService.projectList$.subscribe((projects: ProjectList[] | null) => {
-      if (!_.isNil(projects)) {
-        this.projectGroups = projects.map(group => group.projectGroup.name);
+    this.projectService.projectGroups$.subscribe((groups: string[]) => {
+      if (groups) {
+        this.projectGroups = groups;
       }
     });
-    if (this.projectDataService.resetFilters$) {
-      this.projectDataService.resetFilters$.subscribe(() => {
+    if (this.projectService.resetFilters$) {
+      this.projectService.resetFilters$.subscribe(() => {
         this.resetFilterToolbar();
       });
     }

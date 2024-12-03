@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FilterCriteria } from '../shared/interfaces/filter-criteria';
-import { SonarQubeProjectService } from '../../shared/services/sonarqube-project.service';
-import { ProjectDataService } from '../shared/services/project.data.service';
+import { ProjectService } from './projects.service';
+
 
 @Component({
   selector: 'app-projects',
@@ -11,19 +11,14 @@ import { ProjectDataService } from '../shared/services/project.data.service';
 export class ProjectsComponent {
   filterCriteria: FilterCriteria = {};
 
-  constructor(private sonarQubeProjectService: SonarQubeProjectService, private projectDataService: ProjectDataService) {
-  }
-
-  ngOnInit(): void {
-    this.sonarQubeProjectService.getProjectsByGroup().subscribe();
+  constructor(private projectService: ProjectService) {
   }
 
   onFilterChange(criteria: FilterCriteria) {
     this.filterCriteria = criteria;
-    this.projectDataService.resetFilters$.next(); // Emit an event to reset filters
+    this.projectService.resetFilters$.next(); // Emit an event to reset filters
   }
 
-  // Add these methods to handle individual filter changes
   onSearchChange(searchTerm: string) {
     this.filterCriteria = { ...this.filterCriteria, searchTerm };
   }

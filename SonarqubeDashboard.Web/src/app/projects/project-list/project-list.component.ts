@@ -1,9 +1,8 @@
-// project-list.component.ts
-import { Component, EventEmitter, Input, OnInit, SimpleChanges } from '@angular/core';
+import { ProjectListService } from './project-list.service';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FilterCriteria } from '../shared/interfaces/filter-criteria';
 import { FilteringService } from '../shared/services/filtering.service';
 import { ProjectSortingService } from '../shared/services/project.sorting.service';
-import { ProjectDataService } from '../shared/services/project.data.service';
 import { ProjectList } from './project-list';
 import { ProjectItem } from './project-item/project-item';
 import _ from 'lodash';
@@ -28,13 +27,13 @@ export class ProjectListComponent implements OnInit {
   isLoading: boolean = true; // Initialize as true
 
   constructor(
-    private projectDataService: ProjectDataService,
+    private projectListService: ProjectListService,
     private filteringService: FilteringService,
     private sortingService: ProjectSortingService
   ) { }
 
   ngOnInit() {
-    this.projectDataService.projectList$.subscribe(data => {
+    this.projectListService.getProjectList().subscribe(data => {
       if (!_.isNil(data)) {
         this.projectList = data;
         this.flattenedProjectItems = this.flattenProjectItems(data);

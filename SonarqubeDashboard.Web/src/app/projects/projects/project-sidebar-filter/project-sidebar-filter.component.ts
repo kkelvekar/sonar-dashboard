@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FilterCriteria } from '../../shared/interfaces/filter-criteria';
 import { ProjectList } from '../../project-list/project-list';
-import { ProjectDataService } from '../../shared/services/project.data.service';
+import { ProjectService } from '../projects.service';
 
 @Component({
   selector: 'project-sidebar-filter',
@@ -33,11 +33,11 @@ export class ProjectSidebarFilterComponent {
   selectedCoverage: string[] = [];
 
   constructor(
-    private projectDataService: ProjectDataService,
+    private projectService: ProjectService,
   ) { }
 
   ngOnInit() {
-    this.projectDataService.projectList$.subscribe(data => {
+    this.projectService.projectList$.subscribe(data => {
       if (data !== null) {
         this.projectList = data;
         this.calculateCounts();
