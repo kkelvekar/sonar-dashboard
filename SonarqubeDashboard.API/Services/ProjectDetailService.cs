@@ -236,7 +236,7 @@ namespace SonarqubeDashboard.API.Services
 
                 // Specific metrics
                 // Set specific metrics for lines and lines to cover
-                SetLinesMetrics(projectMeasures, measures, prefix);
+                SetLinesMetrics(projectMeasures, measures);
 
                 return projectMeasures;
             }
@@ -412,31 +412,25 @@ namespace SonarqubeDashboard.API.Services
         /// </summary>
         /// <param name="projectMeasures">The project measures object.</param>
         /// <param name="measures">The list of measures.</param>
-        /// <param name="prefix">The prefix for the metrics.</param>
-        private void SetLinesMetrics(ProjectMeasures projectMeasures, List<Measure> measures, string prefix)
+        /// 
+        private void SetLinesMetrics(ProjectMeasures projectMeasures, List<Measure> measures)
         {
             try
             {
-                var linesMetric = $"{prefix}lines";
-                var linesToCoverMetric = $"{prefix}lines_to_cover";
-
-                var linesValue = FormatNumber(GetValue(measures, linesMetric));
-                var linesToCoverValue = FormatNumber(GetValue(measures, linesToCoverMetric));
-
                 if (projectMeasures is NewCodeProjectMeasures newCodeMeasures)
                 {
-                    newCodeMeasures.NewLines = linesValue;
-                    newCodeMeasures.NewLinesToCover = linesToCoverValue;
+                    newCodeMeasures.NewLines = FormatNumber(GetValue(measures, MetricsKeys.NewLines));
+                    newCodeMeasures.NewLinesToCover = FormatNumber(GetValue(measures, MetricsKeys.NewLinesToCover));
                 }
                 else if (projectMeasures is OverallCodeProjectMeasures overallMeasures)
                 {
-                    overallMeasures.Lines = linesValue;
-                    overallMeasures.LinesToCover = linesToCoverValue;
+                    overallMeasures.Lines = FormatNumber(GetValue(measures, MetricsKeys.Ncloc));
+                    overallMeasures.LinesToCover = FormatNumber(GetValue(measures, MetricsKeys.LinesToCover)); ;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while setting lines metrics with prefix '{Prefix}'.", prefix);
+                _logger.LogError(ex, "An error occurred while setting lines metrics.");
             }
         }
     }
