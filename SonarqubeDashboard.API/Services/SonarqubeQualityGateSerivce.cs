@@ -1,4 +1,5 @@
-﻿using SonarqubeDashboard.API.Interfaces;
+﻿using SonarqubeDashboard.API.Helpers.Constants;
+using SonarqubeDashboard.API.Interfaces;
 using SonarqubeDashboard.API.Models;
 using System.Net.Http;
 using System.Text.Json;
@@ -100,7 +101,7 @@ namespace SonarqubeDashboard.API.Services
                         var metricKey = condition.MetricKey;
                         var comparator = condition.Comparator;
                         var errorThreshold = condition.ErrorThreshold;
-                        var actualValue = condition.ActualValue;
+                        var actualValue = metricKey == MetricsKeys.NewDuplicatedLinesDensity ? FormatDecimal(condition.ActualValue) : condition.ActualValue;
 
                         // Skip if required fields are missing
                         if (string.IsNullOrEmpty(metricKey) || string.IsNullOrEmpty(actualValue))
@@ -163,6 +164,31 @@ namespace SonarqubeDashboard.API.Services
             return comperator
                 .Replace("GT", "is greater than")
                 .Replace("LT", "is less than");
+        }
+
+        private string FormatDecimal(string numberString)
+        {
+            try
+            {
+                if (decimal.TryParse(numberString, out decimal number))
+                {
+                    if (number >= 0)
+                    {
+                        number = Math.Round(number, 1, MidpointRounding.AwayFromZero);
+                        return $"{number}";
+                    }
+                    else
+                    {
+                        return number.ToString();
+                    }
+                }
+                return numberString;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while rounding up number '{NumberString}'.", numberString);
+                return numberString;
+            }
         }
     }
 }
