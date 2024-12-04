@@ -231,7 +231,7 @@ namespace SonarqubeDashboard.API.Services
 
                 // Common metrics
                 projectMeasures.Coverage = GetValue(measures, $"{prefix}coverage");
-                projectMeasures.DuplicatedLinesDensity = GetValue(measures, $"{prefix}duplicated_lines_density");
+                projectMeasures.DuplicatedLinesDensity = FormatDecimal(GetValue(measures, $"{prefix}duplicated_lines_density"));
                 projectMeasures.Ncloc = GetValue(measures, $"ncloc");
 
                 // Specific metrics
@@ -378,6 +378,31 @@ namespace SonarqubeDashboard.API.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while formatting number '{NumberString}'.", numberString);
+                return numberString;
+            }
+        }
+
+        private string FormatDecimal(string numberString)
+        {
+            try
+            {
+                if (decimal.TryParse(numberString, out decimal number))
+                {
+                    if (number >= 0)
+                    {
+                        number = Math.Round(number, 1, MidpointRounding.AwayFromZero);
+                        return $"{number}";
+                    }
+                    else
+                    {
+                        return number.ToString();
+                    }
+                }
+                return numberString;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while rounding up number '{NumberString}'.", numberString);
                 return numberString;
             }
         }
