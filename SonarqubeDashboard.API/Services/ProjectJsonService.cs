@@ -1,4 +1,5 @@
-﻿using SonarqubeDashboard.API.Interfaces;
+﻿using Humanizer;
+using SonarqubeDashboard.API.Interfaces;
 using SonarqubeDashboard.API.Models;
 using System.Reflection;
 using System.Text.Json;
@@ -22,6 +23,7 @@ namespace SonarqubeDashboard.API.Services
             {
                 try
                 {
+                    project.Name = project.Name.Humanize(LetterCasing.Title);
                     project.Metrics = await _sonarqubeMeasuresService.GetProjectMetrics(project.Key);
                 }
                 catch (Exception ex)

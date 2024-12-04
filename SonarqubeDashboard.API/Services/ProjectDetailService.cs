@@ -72,7 +72,7 @@ namespace SonarqubeDashboard.API.Services
                 var result = new ProjectDetails
                 {
                     ProjectKey = project.Key,
-                    ProjectName = project.Name,
+                    ProjectName = project.Name.Humanize(LetterCasing.Title),
                     ProjectGroup = project.Group,
                     Period = new()
                     {
